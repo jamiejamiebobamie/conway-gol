@@ -2,6 +2,8 @@
 let canvas;
 let grid;
 let buttons = [];
+let slider;
+let sliders = []
 
 // constants that control the size of the p5.js canvas
 let gridWidth;
@@ -16,8 +18,17 @@ let autoRefreshOn = true;
 function setup() {
     recreateCanvas();
     canvas.parent('sketch-holder');
+
     // centers the canvas
     imageMode(CENTER);
+
+    let numSliders = 10;
+    for (let i = 0; i < numSliders; i++){
+        // constructor(widthOfContainer, heightOfContainer, orientation, index, lenSliders, func, userDragButton){
+        // console.log(windowWidth)
+        slider = new Slider(windowWidth, windowHeight, true, i, numSliders, nullFunction, 0);
+        buttons.push(slider)
+    }
 }
 
 // p5.js built-in method
@@ -28,11 +39,15 @@ function windowResized() {
 // p5.js built-in method
 function draw () {
     background(255);
-    if (grid.checkForEndState() && autoRefreshOn){
-        recreateCanvas();
-    }
-    grid.draw();
-    for (let i = 0; i < 3; i++){
+
+    // for (let i = 0; i < sliders.length; i++){
+    //     sliders[i].draw();
+    // }
+    // if (grid.checkForEndState() && autoRefreshOn){
+    //     recreateCanvas();
+    // }
+    // grid.draw();
+    for (let i = 0; i < buttons.length; i++){
         buttons[i].draw();
     }
 }
@@ -67,6 +82,7 @@ function recreateCanvas(){
 }
 
 // button functionality on click
+let nullFunction = () => "I do nothing!";
 let refresh = () => recreateCanvas();
 let togglefAutoRefresh = () => autoRefreshOn = !autoRefreshOn;
 let saveToComputer = () => {
@@ -77,6 +93,7 @@ let saveToComputer = () => {
     im.save(filename);
 }
 
+// p5.js built-in method
 function mouseClicked() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
     for (let i = 0; i < buttons.length; i++){
@@ -84,6 +101,28 @@ function mouseClicked() {
             buttons[i].performClickFunctionality()
         }
     }
+}
+
+// p5.js built-in method
+function mousePressed() {
+    clickLocation = { 'x': mouseX, 'y' : mouseY };
+    for (let i = 0; i < buttons.length; i++){
+        if (buttons[i].testForClick(clickLocation)){
+            console.log('wow', buttons.length)
+        }
+        // if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging != undefined){
+        //     this.isDragging = true;
+        // }
+    }
+}
+
+// p5.js built-in method
+function mouseReleased() {
+    for (let i = 0; i < buttons.length; i++){
+        if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging == true){
+            this.isDragging = false;
+        }
+}
 }
 
 // function saveToComputer(){

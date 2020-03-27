@@ -55,6 +55,10 @@ class Button {
         }
     }
 
+    // p5.js built-in method
+    mouseDragged() {
+    }
+
     draw(){
     // need to delay the check on this as well as abstract away the functionality.
         // not all buttons will change color on mouseover.
