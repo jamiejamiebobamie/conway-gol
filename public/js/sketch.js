@@ -14,21 +14,23 @@ let containerExtension = 0;
 let buttonContainerWidth;
 let autoRefreshOn = true;
 
+let numSliders = 1;
+
+
 // p5.js built-in method
 function setup() {
+
+    sliders = [];
+    for( let i = 0; i < numSliders; i++){
+            slider = new Slider(windowWidth, windowHeight, windowWidth<windowHeight, i, numSliders, nullFunction, 0);
+            buttons.push(slider)
+    }
+
     recreateCanvas();
     canvas.parent('sketch-holder');
 
     // centers the canvas
     imageMode(CENTER);
-
-    let numSliders = 10;
-    for (let i = 0; i < numSliders; i++){
-        // constructor(widthOfContainer, heightOfContainer, orientation, index, lenSliders, func, userDragButton){
-        // console.log(windowWidth)
-        slider = new Slider(windowWidth, windowHeight, false, i, numSliders, nullFunction, 0);
-        buttons.push(slider)
-    }
 }
 
 // p5.js built-in method
@@ -38,15 +40,12 @@ function windowResized() {
 
 // p5.js built-in method
 function draw () {
-    background(255);
+    background(256);
 
-    // for (let i = 0; i < sliders.length; i++){
-    //     sliders[i].draw();
-    // }
-    // if (grid.checkForEndState() && autoRefreshOn){
-    //     recreateCanvas();
-    // }
-    // grid.draw();
+    if (grid.checkForEndState() && autoRefreshOn){
+        recreateCanvas();
+    }
+    grid.draw();
     for (let i = 0; i < buttons.length; i++){
         buttons[i].draw();
     }
@@ -70,7 +69,21 @@ function recreateCanvas(){
     grid = new Grid(gridWidth, gridHeight, portrait);
     grid.randomizeCellState();
 
-    buttons = [];
+    sliders = [];
+    sliderCounter = 0;
+    for( let i = 0; i < buttons.length; i++){
+        let oldValue = buttons[i].getScaledUserDragButtonValue()
+        console.log(oldValue)
+        if (oldValue){
+            sliderValue = buttons[i].getNewScaledUserDragButtonValue(oldValue)
+            slider = new Slider(windowWidth, windowHeight, portrait, sliderCounter, 4, nullFunction, sliderValue);
+            sliders.push(slider)
+            sliderCounter++;
+        }
+    }
+
+    buttons = [...sliders];
+    // buttons = []
     let toggleAutoRefreshButton = new ToggleAutoRefresh(windowHeight/10, buttonContainerWidth, windowHeight, portrait, 0, 3, togglefAutoRefresh);
     buttons.push(toggleAutoRefreshButton);
     let refreshButton = new RefreshButton(windowHeight/10, buttonContainerWidth, windowHeight, portrait, 1, 3, refresh);

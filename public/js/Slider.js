@@ -23,7 +23,7 @@ class Slider {
             this.buttonX = userDragButton || this.offset;
             this.buttonY = this.offset + index * heightOfContainer / lenSliders;
 
-            this.sliderX = this.buttonX
+            this.sliderX = this.offset
             this.sliderY = this.buttonY + this.buttonHeight/2.6
 
             this.sliderWidth = widthOfContainer - this.offset*2;
@@ -37,12 +37,10 @@ class Slider {
             this.buttonY = userDragButton | this.offset;
 
             this.sliderX = this.buttonX + this.buttonWidth/2.6
-            this.sliderY = this.buttonY
+            this.sliderY = this.offset
 
             this.sliderWidth = this.buttonWidth/4;
             this.sliderHeight = heightOfContainer - heightOfContainer/10 - this.offset;
-
-
 
         }
 
@@ -81,16 +79,16 @@ class Slider {
         }
     }
 
-    // call this method and store the variable before
-    //     calling the recreateCanvas method
-    storeUserDragButtonValue(){
-        let portrait = true;
-        if (this.orientation == portrait){
-            return this.buttonX
-        } else {
-            return this.buttonY
-        }
-    }
+    // // call this method and store the variable before
+    // //     calling the recreateCanvas method
+    // storeUserDragButtonValue(){
+    //     let portrait = true;
+    //     if (this.orientation == portrait){
+    //         return this.buttonX
+    //     } else {
+    //         return this.buttonY
+    //     }
+    // }
 
     // call this method on mouseReleased() to retrieve a float
         // that is proportional to the sliders range
@@ -100,6 +98,15 @@ class Slider {
             return this.buttonX/this.sliderWidth
         } else {
             return this.buttonY/this.sliderHeight
+        }
+    }
+
+    getNewScaledUserDragButtonValue(oldValue){
+        let portrait = true;
+        if (this.orientation == portrait){
+            return this.sliderWidth*oldValue;
+        } else {
+            return this.sliderHeight*oldValue;
         }
     }
 
