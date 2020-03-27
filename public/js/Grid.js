@@ -1,5 +1,5 @@
 
-let cellDivisor = 35;
+let cellDivisor = 30;
 
 class Grid {
     constructor (widthOfCanvas, heightOfCanvas, portraitMode) {
@@ -34,14 +34,24 @@ class Grid {
         this.store2 = undefined;
     }
 
+    getGridDimensions(){
+        return [this.cellSize * this.numberOfColumns, this.cellSize * this.numberOfRows,]
+    }
+
     randomizeCellState() {
         this.currentGeneration = 0;
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let column = 0; column < this.numberOfColumns; column++) {
                 this.cells[row][column].isAlive = floor(random(2));
-                this.cells[row][column].colorR = 10 * column;
-                this.cells[row][column].colorG = 10 * row;
-                this.cells[row][column].colorB = column + row;
+                if (this.cells[row][column].isAlive){
+                    this.cells[row][column].color.R = 10 * column;
+                    this.cells[row][column].color.G = 10 * row;
+                    this.cells[row][column].color.B = column + row;
+                } else {
+                    this.cells[row][column].color.R = 240;
+                    this.cells[row][column].color.G = 240;
+                    this.cells[row][column].color.B = 240;
+                }
             }
         }
     }
@@ -57,13 +67,14 @@ class Grid {
         }
     }
 
-    getNeighbors (currentCell){
+    getNeighbors(currentCell){
         let neighbors = [];
         for (let rowIncrement = -1; rowIncrement <= 1; rowIncrement++) {
             for (let columnIncrement = -1; columnIncrement <= 1; columnIncrement++) {
                 let testRow = currentCell.row + rowIncrement;
                 let testColumn = currentCell.column + columnIncrement;
-                if(this.isValidPosition(currentCell, testRow, testColumn)){
+                let isValid = this.isValidPosition(currentCell, testRow, testColumn);
+                if(isValid){
                     neighbors.push(this.cells[testRow][testColumn]);
                 }
             }
@@ -71,7 +82,7 @@ class Grid {
         return neighbors;
     }
 
-    updateNeighborCounts () {
+    updateNeighborCounts() {
     for (let row = 0; row < this.numberOfRows; row++) {
         for (let column = 0; column < this.numberOfColumns; column++) {
             this.cells[row][column].liveNeighborCount = 0;
@@ -85,53 +96,44 @@ class Grid {
         }
     }
 
-    cellColor () {
-    let colorR = 0;
-    let colorG = 0;
-    let colorB = 0;
-    //dividing by 3 wasn't giving me the colors I wanted:
-    // let colorDivisor = 3.7;
-    for (let row = 0; row < this.numberOfRows; row++) {
-        for (let column = 0; column < this.numberOfColumns; column++) {
-            if(this.cells[row][column].birth == true) {
-                let neighbors = this.getNeighbors(this.cells[row][column]);
-                for(let i = 0; i < neighbors.length; i++) {
-                    if(neighbors[i].isAlive == true){
-                        colorR = this.cells[row][column].colorR + neighbors[i].colorR;
-                        colorG = this.cells[row][column].colorG + neighbors[i].colorG;
-                        colorB = this.cells[row][column].colorB + neighbors[i].colorB;
+    //needs to be refactored
+    cellColor() {
+        //dividing by 3 wasn't giving me the colors I wanted:
+        let colorDivisor = float(cellDivisor)/10.5;
+
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let column = 0; column < this.numberOfColumns; column++) {
+                if(this.cells[row][column].isBirthed) {
+                    let neighbors = this.getNeighbors(this.cells[row][column]);
+                    let livingNeighbors = 0;
+                    for(let i = 0; i < neighbors.length; i++) {
+                        if(neighbors[i].isAlive){
+                            this.cells[row][column].color.R += neighbors[i].color.R;
+                            this.cells[row][column].color.G += neighbors[i].color.G;
+                            this.cells[row][column].color.B += neighbors[i].color.B;
+                        }
                     }
+                    this.cells[row][column].color.R /= colorDivisor;
+                    this.cells[row][column].color.G /= colorDivisor;
+                    this.cells[row][column].color.B /= colorDivisor;
+
+                    this.cells[row][column].isBirthed = false;
                 }
-                colorR /= neighbors.length;//colorDivisor;
-                colorG /= neighbors.length;//colorDivisor;
-                colorB /= neighbors.length;//colorDivisor;
-                this.cells[column][row].birth = false;
-            } else if (this.currentGeneration > 0) {
-                colorR = 240;
-                colorG = 240;
-                colorB = 240;
-            } else {
-                colorR = (240 + this.cells[row][column].colorR) / 2;
-                colorG = (240 + this.cells[row][column].colorG) / 2;
-                colorB = (240 + this.cells[row][column].colorB) / 2;
             }
-                this.cells[row][column].colorR = colorR;
-                this.cells[row][column].colorG = colorG;
-                this.cells[row][column].colorB = colorB;
-            }
+
         }
     }
 
 
     updatePopulation () {
-    if(frameCount % 1 === 0) {
-        this.currentGeneration = this.currentGeneration + 1;
-        for (let row = 0; row < this.numberOfRows; row++) {
-            for (let column = 0; column < this.numberOfColumns; column++) {
-                this.cells[row][column].liveOrDie();
-                this.cellColor();
+        if(frameCount % 10 == 0) {
+            this.currentGeneration += 1;
+            for (let row = 0; row < this.numberOfRows; row++) {
+                for (let column = 0; column < this.numberOfColumns; column++) {
+                    this.cells[row][column].liveOrDie();
+                    this.cellColor();
+                    }
                 }
-            }
         }
     }
 
@@ -157,17 +159,17 @@ class Grid {
 
     */
     storeTwoGenerations(){
-        if (this.currentGeneration % 2){     //if odd
+        if (this.currentGeneration % 4 == 0){     //if odd
             if (this.storeGenIn1){
-                this.store1 = this.returnColors();
-                this.storeGenIn1 = false;
+                this.store1 = this.getIsAliveStateArray();
             } else {
-                this.store2 = this.returnColors();
-                this.storeGenIn1 = true;
+                this.store2 = this.getIsAliveStateArray();
             }
+            this.storeGenIn1 = !this.storeGenIn1;
         }
     }
-
+    // this method doesn't work all of the time either due to framerate
+        // or floating point rounding
     checkForEndState(){
         let equal = false;
         // check to make these variables are defined
@@ -177,16 +179,25 @@ class Grid {
                 equal = true;
                 let i = 0;
                 while (i < this.store1.length && equal){
-                    for (let j = 0; j < this.store1[i].length; j++){
-                        if (this.store1[i][j] != this.store2[i][j]){
+                    if (this.store1[i] != this.store2[i]){
                             equal = false;
-                        }
                     }
-                        i++;
+                    i++;
                 }
             }
         }
         return equal
+    }
+
+    getIsAliveStateArray(){
+        let livingCells = [];
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let column = 0; column < this.numberOfColumns; column++) {
+                    livingCells.push(this.cells[row][column].isAlive);
+            }
+        }
+        return livingCells;
+
     }
 
     draw () {
@@ -199,4 +210,27 @@ class Grid {
             }
         }
     }
+}
+
+class SavedGrid extends Grid{
+    constructor (widthOfCanvas, heightOfCanvas){
+        let portraitMode = widthOfCanvas < heightOfCanvas;
+        super(widthOfCanvas, heightOfCanvas, portraitMode);
+    }
+
+    create(colors){
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let column = 0; column < this.numberOfColumns; column++) {
+                index = row + column;
+                colorR = colors[index][2];
+                colorG = colors[index][3];
+                colorB = colors[index][4];
+                this.cells[row][column].color.R = colorR;
+                this.cells[row][column].color.G = colorG;
+                this.cells[row][column].color.B = colorB;
+            }
+        }
+    }
+
+    draw(){}
 }

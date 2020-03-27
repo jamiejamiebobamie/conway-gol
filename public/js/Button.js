@@ -1,7 +1,7 @@
 
 // button base class
 class Button {
-    constructor(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons){
+    constructor(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func){
         // True = row, False = column
         this.orientation = orientation;
         // the number of buttons in the container
@@ -25,11 +25,14 @@ class Button {
         this.mouseOver = false;
         this.color = 'black';
         this.mouseOverColor = 'blue';
+
+        this.func = func;
     }
 
     performClickFunctionality(){
-            // do function
-            console.log(this.index);
+            if (this.func){
+                this.func();
+            }
     }
 
     testForClick(clickLocation){
@@ -65,48 +68,36 @@ class Button {
     }
 }
 
-class CreateSnapShotButton extends Button{
-    constructor(offset, widthOfContainer, heightOfContainer, row, index, lenButtons){
-        super(offset, widthOfContainer, heightOfContainer, row, index, lenButtons);
-    }
-
-    performClickFunctionality(){
-        // super.performClickFunctionality()
-        console.log("you clicked the CreateSnapShotButton")
-    }
-}
-
-class AboutButton extends Button{
-    constructor(offset, widthOfContainer, heightOfContainer, row, index, lenButtons){
-        super(offset, widthOfContainer, heightOfContainer, row, index, lenButtons);
-    }
-
-    performClickFunctionality(){
-        // super.performClickFunctionality()
-        console.log("you clicked the AboutButton")
-    }
-}
-
-
 class RefreshButton extends Button{
-    constructor(offset, widthOfContainer, heightOfContainer, row, index, lenButtons){
-        super(offset, widthOfContainer, heightOfContainer, row, index, lenButtons);
+    constructor(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func){
+        super(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func);
     }
 
     performClickFunctionality(){
-        // super.performClickFunctionality()
+        super.performClickFunctionality()
         console.log("you clicked the RefreshButton")
     }
 }
 
-class InspectSnapShotButton extends Button{
-    constructor(offset, widthOfContainer, heightOfContainer, row, index, lenButtons){
-        super(offset, widthOfContainer, heightOfContainer, row, index, lenButtons);
+class SaveButton extends Button{
+    constructor(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func){
+        super(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func);
     }
 
     performClickFunctionality(){
-        // super.performClickFunctionality()
-        console.log("you clicked the InspectSnapShotButton")
+        super.performClickFunctionality()
+        console.log("you clicked the SaveButton")
+    }
+}
+
+class ToggleAutoRefresh extends Button{
+    constructor(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func){
+        super(offset, widthOfContainer, heightOfContainer, orientation, index, lenButtons, func);
+    }
+
+    performClickFunctionality(){
+        super.performClickFunctionality()
+        console.log("you clicked the ToggleAutoRefresh")
     }
 }
 

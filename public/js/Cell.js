@@ -54,7 +54,11 @@ class Cell {
     }
 
     draw () {
-        fill(color(this.color.R, this.color.G, this.color.B));
+        if (this.isAlive){
+            fill(color(this.color.R, this.color.G, this.color.B));
+        } else {
+            fill(240);
+        }
         // noStroke();// testing
         rect(this.x, this.y, this.width, this.height);
     }
