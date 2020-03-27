@@ -1,59 +1,61 @@
 class Cell {
-  constructor (row, column, cellSize) {
+    constructor (row, column, cellSize) {
 
-    this.x = column * cellSize + 1
-    this.y =  row * cellSize + 1
-    this.width = cellSize;
-    this.height = cellSize;
+        this.row = row;
+        this.column = column;
 
-    this.isAlive = false;
-    this.isBirthed = false;
+        this.x = column * cellSize + 1
+        this.y =  row * cellSize + 1
+        this.width = cellSize;
+        this.height = cellSize;
 
-    this.liveNeighborCount = 0;
-    this.color = {
-                    'R' : 10 * column,
-                    'G' : 10 * row,
-                    'B' : 10 * column + row
-                };
-  }
+        this.isAlive = false;
+        this.isBirthed = false;
 
-  returnColor(){
-      let colorInfo = [ int(this.x),
+        this.liveNeighborCount = 0;
+
+        this.color = {
+            'R' : 10 * column,
+            'G' : 10 * row,
+            'B' : 10 * column + row
+        };
+    }
+
+    returnColor(){
+        let colorInfo = [
+                        int(this.x),
                         int(this.y),
                         int(this.color.R),
                         int(this.color.G),
-                        int(this.color.B) ];
-      return colorInfo
-  }
-
-  setIsAlive (isAlive) {
-    this.isAlive = isAlive;
-  }
-
-  moreThanThreeNeighbors(){
-      return this.liveNeighborCount > 3
-  }
-
-  lessThantwoNeighbors(){
-      return this.liveNeighborCount < 2
-  }
-
-  liveOrDie () {
-     if (this.isAlive){
-         if (this.lessThantwoNeighbors() || this.moreThanThreeNeighbors()) {
-           this.isAlive = false;
-         }
-     } else {
-         if (!this.lessThantwoNeighbors() && !this.moreThanThreeNeighbors()) {
-             this.isAlive = true;
-             this.isBirthed = true;
-         }
-     }
+                        int(this.color.B)
+                        ];
+        return colorInfo
     }
 
-  draw () {
-    fill(color(this.colorR, this.colorG, this.colorB));
-    noStroke();// testing
-    rect(this.x, this.y, this.width, this.height);
-  }
+    moreThanThreeNeighbors(){
+        return this.liveNeighborCount > 3
+    }
+
+    lessThantwoNeighbors(){
+        return this.liveNeighborCount < 2
+    }
+
+    liveOrDie () {
+        let isDead;
+        let isAlive;
+        if (this.isAlive){
+            isDead = this.lessThantwoNeighbors() || this.moreThanThreeNeighbors()
+            this.isAlive = isDead;
+        } else {
+            isAlive = !this.lessThantwoNeighbors() && !this.moreThanThreeNeighbors();
+            this.isAlive = isAlive;
+            this.isBirthed = isAlive;
+        }
+    }
+
+    draw () {
+        fill(color(this.color.R, this.color.G, this.color.B));
+        // noStroke();// testing
+        rect(this.x, this.y, this.width, this.height);
+    }
 }

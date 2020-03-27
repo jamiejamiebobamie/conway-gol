@@ -15,6 +15,7 @@ let buttonContainerWidth;
 function setup() {
     recreateCanvas();
     canvas.parent('sketch-holder');
+
     // centers the canvas
     imageMode(CENTER);
 }
@@ -27,38 +28,33 @@ function windowResized() {
 // p5.js built-in method
 function draw () {
     background(0,255,0);
-
-    // for (let i = 0; i < 3; i++){
-    //     buttons[i].draw();
-    // }
     grid.draw();
+    for (let i = 0; i < 3; i++){
+        buttons[i].draw();
+    }
 }
 
 function recreateCanvas(){
-    // widthOfCanvas = windowWidth - windowWidth / canvasDivisorWidth;
-    // heightOfCanvas = windowHeight;// - windowHeight / canvasDivisorHeight;
 
+    // portrait or landscape orientation?
     let portrait = windowWidth < windowHeight
 
     if (portrait){
-        orientation = true;
-        gridWidth = windowWidth - windowWidth / canvasDivisorWidth;
-        gridHeight = windowHeight;// - windowHeight / canvasDivisorHeight;
+        gridWidth = windowWidth;
+        gridHeight = windowHeight - windowHeight / canvasDivisorHeight;
         buttonContainerWidth = windowWidth - windowWidth / canvasDivisorWidth;;
     } else {
-        orientation = false;
-        gridWidth = windowWidth;// - windowWidth / canvasDivisorWidth;
-        gridHeight = windowHeight - windowHeight / canvasDivisorHeight;
+        gridWidth = windowWidth - windowWidth / canvasDivisorWidth;
+        gridHeight = windowHeight;
         buttonContainerWidth = windowWidth+windowWidth/1.5;
     }
 
-    grid = new Grid(gridWidth, gridHeight, orientation);
+    grid = new Grid(gridWidth, gridHeight, portrait);
     grid.randomizeCellState();
 
     buttons = [];
     for (let i = 0; i < 3; i++){
-            // constructor(offset, widthOfContainer, heightOfContainer, row, index, lenButtons){
-        let button = new Button(windowHeight/10, buttonContainerWidth, windowHeight, orientation, i, 3);
+        let button = new Button(windowHeight/10, buttonContainerWidth, windowHeight, portrait, i, 3);
         buttons.push(button);
     }
     canvas = createCanvas(windowWidth, windowHeight);
@@ -79,6 +75,8 @@ function mouseClicked() {
     // console.log(buttons.length)
     // // refresh();
     // addSnapshot(widthOfCanvas, heightOfCanvas);
+    grid.randomizeCellState();
+
     console.log(returnColors());
 }
 
