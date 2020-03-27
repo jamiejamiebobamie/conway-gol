@@ -30,9 +30,9 @@ class Button {
     }
 
     performClickFunctionality(){
-            if (this.func){
-                this.func();
-            }
+        if (this.func){
+            this.func();
+        }
     }
 
     testForClick(clickLocation){

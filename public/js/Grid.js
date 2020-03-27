@@ -38,7 +38,7 @@ class Grid {
         return [this.cellSize * this.numberOfColumns, this.cellSize * this.numberOfRows,]
     }
 
-    randomizeCellState() {
+    randomizeCellState(){
         this.currentGeneration = 0;
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let column = 0; column < this.numberOfColumns; column++) {
@@ -56,7 +56,7 @@ class Grid {
         }
     }
 
-    isValidPosition (currentCell, row, column) {
+    isValidPosition(currentCell, row, column){
         let validRow = row < this.numberOfRows && row >=0;
         let validColumn = column < this.numberOfColumns && column >= 0;
         let notSelf = currentCell.row != row && currentCell.column != column;
@@ -82,7 +82,7 @@ class Grid {
         return neighbors;
     }
 
-    updateNeighborCounts() {
+    updateNeighborCounts(){
     for (let row = 0; row < this.numberOfRows; row++) {
         for (let column = 0; column < this.numberOfColumns; column++) {
             this.cells[row][column].liveNeighborCount = 0;
@@ -96,9 +96,7 @@ class Grid {
         }
     }
 
-    //needs to be refactored
-    cellColor() {
-        //dividing by 3 wasn't giving me the colors I wanted:
+    cellColor(){
         let colorDivisor = float(cellDivisor)/10.5;
 
         for (let row = 0; row < this.numberOfRows; row++) {
@@ -124,7 +122,7 @@ class Grid {
         }
     }
 
-    updatePopulation () {
+    updatePopulation(){
         if(frameCount % 1 == 0) {
             this.currentGeneration += 1;
             for (let row = 0; row < this.numberOfRows; row++) {
@@ -136,7 +134,6 @@ class Grid {
         }
     }
 
-    // isn't it usually rows contains columns...
     returnColors(){
         let gridColors = []
         for (let row = 0; row < this.numberOfRows; row++) {
@@ -167,13 +164,12 @@ class Grid {
             this.storeGenIn1 = !this.storeGenIn1;
         }
     }
+
     // this method doesn't work all of the time either due to framerate
-        // or floating point rounding
+        // or floating point rounding. need to figure out a different way.
     checkForEndState(){
         let equal = false;
-        // check to make these variables are defined
         if (this.store1 && this.store2){
-            // check to make sure they have the same length.
             if (this.store1.length == this.store2.length){
                 equal = true;
                 let i = 0;
@@ -196,10 +192,9 @@ class Grid {
             }
         }
         return livingCells;
-
     }
 
-    draw () {
+    draw (){
         this.storeTwoGenerations();
         this.updateNeighborCounts();
         this.updatePopulation();
@@ -209,27 +204,4 @@ class Grid {
             }
         }
     }
-}
-
-class SavedGrid extends Grid{
-    constructor (widthOfCanvas, heightOfCanvas){
-        let portraitMode = widthOfCanvas < heightOfCanvas;
-        super(widthOfCanvas, heightOfCanvas, portraitMode);
-    }
-
-    create(colors){
-        for (let row = 0; row < this.numberOfRows; row++) {
-            for (let column = 0; column < this.numberOfColumns; column++) {
-                index = row + column;
-                colorR = colors[index][2];
-                colorG = colors[index][3];
-                colorB = colors[index][4];
-                this.cells[row][column].color.R = colorR;
-                this.cells[row][column].color.G = colorG;
-                this.cells[row][column].color.B = colorB;
-            }
-        }
-    }
-
-    draw(){}
 }

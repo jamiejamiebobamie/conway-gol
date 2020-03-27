@@ -60,22 +60,24 @@ function recreateCanvas(){
     buttons.push(toggleAutoRefreshButton);
     let refreshButton = new RefreshButton(windowHeight/10, buttonContainerWidth, windowHeight, portrait, 1, 3, refresh);
     buttons.push(refreshButton);
-    let saveButton = new SaveButton(windowHeight/10, buttonContainerWidth, windowHeight, portrait, 2, 3, saveGrid);
+    let saveButton = new SaveButton(windowHeight/10, buttonContainerWidth, windowHeight, portrait, 2, 3, saveToComputer);
     buttons.push(saveButton);
-
-    // let refresh = () => recreateCanvas();
-    // let togglefAutoRefresh = () => autoRefreshOn = !autoRefreshOn;
-    // let saveGrid = () => saveGrid();
-    //
-    // refreshButton.func = refresh;
 
     canvas = createCanvas(windowWidth, windowHeight);
 }
 
-function nullFunction(){}
+// button functionality on click
+let refresh = () => recreateCanvas();
+let togglefAutoRefresh = () => autoRefreshOn = !autoRefreshOn;
+let saveToComputer = () => {
+    let nums = Date.now()
+    let filename = nums.toString() + ".png"
+    let dimensions = grid.getGridDimensions()
+    let im = get(0, 0, dimensions[0], dimensions[1]);
+    im.save(filename);
+}
 
 function mouseClicked() {
-
     clickLocation = { 'x': mouseX, 'y' : mouseY };
     for (let i = 0; i < buttons.length; i++){
         if (buttons[i].testForClick(clickLocation)){
@@ -84,19 +86,11 @@ function mouseClicked() {
     }
 }
 
-function returnColors(){
-    return grid.returnColors();
-}
-
-function saveToComputer(){
-    let nums = Date.now()
-    let filename = nums.toString() + ".png"
-    let dimensions = grid.getGridDimensions()
-
-    let im = get(0, 0, dimensions[0], dimensions[1]);
-    im.save(filename);
-}
-
-let refresh = () => recreateCanvas();
-let togglefAutoRefresh = () => autoRefreshOn = !autoRefreshOn;
-let saveGrid = () => saveToComputer();
+// function saveToComputer(){
+//     let nums = Date.now()
+//     let filename = nums.toString() + ".png"
+//     let dimensions = grid.getGridDimensions()
+//
+//     let im = get(0, 0, dimensions[0], dimensions[1]);
+//     im.save(filename);
+// }

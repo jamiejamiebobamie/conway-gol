@@ -1,4 +1,4 @@
-class Cell {
+class Cell{
     constructor (row, column, cellSize) {
 
         this.row = row;
@@ -40,7 +40,7 @@ class Cell {
         return this.liveNeighborCount < 2
     }
 
-    liveOrDie () {
+    liveOrDie() {
         let isDead;
         let isAlive;
         if (this.isAlive){
@@ -53,13 +53,13 @@ class Cell {
         }
     }
 
-    draw () {
+    draw (){
         if (this.isAlive){
             fill(color(this.color.R, this.color.G, this.color.B));
         } else {
             fill(240);
         }
-        // noStroke();// testing
+        stroke(256);
         rect(this.x, this.y, this.width, this.height);
     }
 }
