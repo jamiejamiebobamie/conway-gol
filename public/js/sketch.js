@@ -10,7 +10,7 @@ let canvasDivisorWidth = 15;
 let canvasDivisorHeight = 5;
 let containerExtension = 0;
 let buttonContainerWidth;
-let autoRefreshOn = false;
+let autoRefreshOn = true;
 
 // p5.js built-in method
 function setup() {

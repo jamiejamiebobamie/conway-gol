@@ -1,5 +1,5 @@
 
-let cellDivisor = 30;
+let cellDivisor = 20;
 
 class Grid {
     constructor (widthOfCanvas, heightOfCanvas, portraitMode) {
@@ -124,9 +124,8 @@ class Grid {
         }
     }
 
-
     updatePopulation () {
-        if(frameCount % 10 == 0) {
+        if(frameCount % 1 == 0) {
             this.currentGeneration += 1;
             for (let row = 0; row < this.numberOfRows; row++) {
                 for (let column = 0; column < this.numberOfColumns; column++) {
@@ -159,7 +158,7 @@ class Grid {
 
     */
     storeTwoGenerations(){
-        if (this.currentGeneration % 4 == 0){     //if odd
+        if (this.currentGeneration % 2 == 0){     //if odd
             if (this.storeGenIn1){
                 this.store1 = this.getIsAliveStateArray();
             } else {
