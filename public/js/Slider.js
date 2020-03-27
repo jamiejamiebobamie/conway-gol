@@ -13,8 +13,6 @@ class Slider {
         this.buttonHeight = 20;
         this.borderRadius = 40;
 
-        this.userDragButtonX = 0;
-        this.userDragButtonY = 0;
 
         // the placement of the button on the canvas based on the orientation
             //  and the bounds of the container.
@@ -22,10 +20,8 @@ class Slider {
 
             this.offset = widthOfContainer/10
 
-            console.log( widthOfContainer,heightOfContainer, this.offset)
-
-            this.buttonX = this.offset;
-            this.buttonY = this.offset + index * heightOfContainer / lenSliders + this.userDragButtonY;
+            this.buttonX = userDragButton || this.offset;
+            this.buttonY = this.offset + index * heightOfContainer / lenSliders;
 
             this.sliderX = this.buttonX
             this.sliderY = this.buttonY + this.buttonHeight/2.6
@@ -33,17 +29,12 @@ class Slider {
             this.sliderWidth = widthOfContainer - this.offset*2;
             this.sliderHeight = this.buttonWidth/4;
 
-            this.userDragButtonX = userDragButton;
-
         } else {
 
-
             this.offset = heightOfContainer/10
-            console.log( widthOfContainer,heightOfContainer, this.offset)
 
-
-            this.buttonX = index * widthOfContainer / lenSliders + (widthOfContainer/(lenSliders*2)) + this.userDragButtonX;
-            this.buttonY = this.offset;
+            this.buttonX = index * widthOfContainer / lenSliders + (widthOfContainer/(lenSliders*2));
+            this.buttonY = userDragButton | this.offset;
 
             this.sliderX = this.buttonX + this.buttonWidth/2.6
             this.sliderY = this.buttonY
@@ -51,7 +42,7 @@ class Slider {
             this.sliderWidth = this.buttonWidth/4;
             this.sliderHeight = heightOfContainer - heightOfContainer/10 - this.offset;
 
-            this.userDragButtonY = userDragButton;
+
 
         }
 
@@ -71,10 +62,10 @@ class Slider {
     }
 
     testForClick(clickLocation){
-        if (clickLocation.x > this.x - this.borderRadius
-            && clickLocation.x < this.x + this.borderRadius
-            && clickLocation.y > this.y - this.borderRadius
-            && clickLocation.y < this.borderRadius + this.y){
+        if (mouseX > this.buttonX - this.borderRadius/2
+            && mouseX < this.buttonX + this.borderRadius/2
+            && mouseY > this.buttonY - this.borderRadius/2
+            && mouseY < this.borderRadius/2 + this.buttonY){
             return true;
         }
     }
@@ -90,30 +81,44 @@ class Slider {
         }
     }
 
-    userDrag(){
-        let portrait = true;
-        if (this.orientation == portrait){
-            this.userDragButton += mouseX
-        } else {
-            this.userDragButton += mouseY;
-        }
-    }
-
     // call this method and store the variable before
     //     calling the recreateCanvas method
-    getUserDragButtonValue(){
+    storeUserDragButtonValue(){
         let portrait = true;
         if (this.orientation == portrait){
-            return this.userDragButtonX
+            return this.buttonX
         } else {
-            return this.userDragButtonY
+            return this.buttonY
         }
     }
 
-    draw(){
+    // call this method on mouseReleased() to retrieve a float
+        // that is proportional to the sliders range
+    getScaledUserDragButtonValue(){
+        let portrait = true;
+        if (this.orientation == portrait){
+            return this.buttonX/this.sliderWidth
+        } else {
+            return this.buttonY/this.sliderHeight
+        }
+    }
 
+    userDrag(){
+        let portrait = true;
+            if (this.orientation == portrait){
+                if ( this.offset < mouseX && mouseX < this.sliderWidth+this.offset){
+                        this.buttonX = mouseX;
+                }
+            } else {
+                if ( this.offset-5 < mouseY && mouseY < this.sliderHeight+this.offset){
+                this.buttonY = mouseY;
+            }
+    }
+}
+
+    draw(){
         if (this.isDragging){
-            userDrag();
+            this.userDrag();
         }
     // slider groove
       noStroke();
@@ -128,11 +133,7 @@ class Slider {
         fill(240)
         stroke(230);
     }
-    // rect(0,0,500,500)
-    // console.log(this.buttonX,this.userDragButtonX , this.buttonY+this.userDragButtonY , this.buttonWidth, this.buttonHeight, this.borderRadius)
-    rect(this.buttonX+this.userDragButtonX , this.buttonY+this.userDragButtonY , this.buttonWidth, this.buttonHeight, this.borderRadius);
-
-      // rect(100*, 0, this.buttonWidth, this.buttonHeight, this.borderRadius);
+    rect(this.buttonX, this.buttonY, this.buttonWidth, this.buttonHeight, this.borderRadius);
     }
 
 }

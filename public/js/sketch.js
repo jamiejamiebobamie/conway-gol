@@ -26,7 +26,7 @@ function setup() {
     for (let i = 0; i < numSliders; i++){
         // constructor(widthOfContainer, heightOfContainer, orientation, index, lenSliders, func, userDragButton){
         // console.log(windowWidth)
-        slider = new Slider(windowWidth, windowHeight, true, i, numSliders, nullFunction, 0);
+        slider = new Slider(windowWidth, windowHeight, false, i, numSliders, nullFunction, 0);
         buttons.push(slider)
     }
 }
@@ -107,22 +107,26 @@ function mouseClicked() {
 function mousePressed() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
     for (let i = 0; i < buttons.length; i++){
-        if (buttons[i].testForClick(clickLocation)){
-            console.log('wow', buttons.length)
-        }
-        // if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging != undefined){
-        //     this.isDragging = true;
+        // if (buttons[i].testForClick(clickLocation)){
+        //     console.log('wow', buttons.length)
         // }
+        if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging != undefined){
+                console.log('wow', buttons.length)
+            buttons[i].isDragging = true;
+        }
     }
 }
 
 // p5.js built-in method
 function mouseReleased() {
+    let value;
     for (let i = 0; i < buttons.length; i++){
-        if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging == true){
-            this.isDragging = false;
+        if (buttons[i].isDragging){
+            value = buttons[i].getScaledUserDragButtonValue()
         }
-}
+        buttons[i].isDragging = false;
+    }
+    console.log(value)
 }
 
 // function saveToComputer(){
