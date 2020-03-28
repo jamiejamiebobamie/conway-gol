@@ -4,13 +4,16 @@ return Math.floor(Math.random() * Math.floor(max));
 
 class Container{
     constructor(parameterObject){
-        // button functionality on click
+
         this.nullFunction = () => "I do nothing!";
+
+        // null parameterObject
         let parameters = {
             offsetX: undefined,
             offsetY: undefined,
-            widthOfParent: undefined,
-            heightOfParent: undefined,
+            parent: undefined,
+            // widthOfParent: undefined, // this should be a pointer to a parent object
+            // heightOfParent: undefined,
             row: undefined,
             index: undefined,
             len: undefined,
@@ -19,15 +22,21 @@ class Container{
             height: undefined
         };
 
+        // if there is a parameter object, set the 'parameters' variable
+            // to point to it.
+            // (this was the best way I found to avoid issues
+            //      if no object is passed in.)
         if(parameterObject){
             parameters = parameterObject;
         }
-        // destructuring my parameterObject and intializing tempVariables
+
+        // destructuring my parameterObject and intializing temporary variables
         let {
             offsetX: offsetX,
             offsetY: offsetY,
-            widthOfParent: widthOfParent,
-            heightOfParent: heightOfParent,
+            parent: parent,
+            // widthOfParent: widthOfParent,
+            // heightOfParent: heightOfParent,
             row: row,
             index: index,
             len: len,
@@ -36,28 +45,50 @@ class Container{
             height: height
         } = parameters;
 
-        // setting data members and member functions with the values from tempVariables
-        this.widthOfParent = widthOfParent || windowWidth;
-        this.heightOfParent = heightOfParent || windowHeight;
+        // setting data members and member functions
+            // with the values from 'parameter' variables
+
+        if (parent){
+            this.widthOfParent = parent.width;
+            this.heightOfParent = parent.height;
+        } else {
+            this.widthOfParent = windowWidth;
+            this.heightOfParent = windowHeight;
+        }
         this.row = row || windowWidth < windowHeight;
         this.index = index || 0;
         this.len = len || 1;
         this.func = func || null;
 
         if (this.row){
+
             this.width = width || this.widthOfParent;
             this.height = height || this.heightOfParent / this.len;
 
-            this.offsetX = offsetX || 0;
-            this.offsetY = offsetY || this.index * this.heightOfParent / this.len;
+            if (parent){
+                this.offsetX = offsetX + parent.offsetX || parent.offsetX;
+                this.offsetY = offsetY + parent.offsetY || this.index * this.heightOfParent / this.len + parent.offsetY;
+            } else {
+                this.offsetX = offsetX || 0;
+                this.offsetY = offsetY || this.index * this.heightOfParent / this.len;
+            }
+
         } else {
+
             this.width = width || this.widthOfParent / this.len;
             this.height = height || this.heightOfParent;
 
-            this.offsetX = offsetX || this.index * this.widthOfParent / this.len;
-            this.offsetY = offsetY || 0;
+            if (parent){
+                this.offsetX = offsetX + parent.offsetX || this.index * this.widthOfParent / this.len + parent.offsetX;
+                this.offsetY = offsetY + parent.offsetY || parent.offsetY;
+            } else {
+                this.offsetX = offsetX || this.index * this.widthOfParent / this.len;
+                this.offsetY = offsetY || 0;
+            }
+
         }
         this.randomColor = (getRandomInt(256))
+        console.log(this.offsetX)
     }
 
     // recreate(widthOfCanvas, heightOfCanvas){
@@ -91,8 +122,18 @@ class Container{
         return parameters
     }
 
+    // container-specific methods
+    getOffsetX(){
+        return this.offsetX
+    }
+    getOffsetY(){
+        return this.offsetY
+    }
+
     draw(){
+        // testing to show the bounds of the container
         fill(this.randomColor);
+        // stroke(this.randomColor)
         rect(this.offsetX,this.offsetY,this.width,this.height)
     }
 }
