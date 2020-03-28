@@ -3,78 +3,96 @@ return Math.floor(Math.random() * Math.floor(max));
 }
 
 class Container{
-
     constructor(parameterObject){
+        // button functionality on click
+        this.nullFunction = () => "I do nothing!";
+        let parameters = {
+            offsetX: undefined,
+            offsetY: undefined,
+            widthOfParent: undefined,
+            heightOfParent: undefined,
+            row: undefined,
+            index: undefined,
+            len: undefined,
+            func: this.nullFunction,
+            width: undefined,
+            height: undefined
+        };
+
+        if(parameterObject){
+            parameters = parameterObject;
+        }
         // destructuring my parameterObject and intializing tempVariables
         let {
-            offset: offset,
+            offsetX: offsetX,
+            offsetY: offsetY,
             widthOfParent: widthOfParent,
             heightOfParent: heightOfParent,
-            orientation: orientation,
+            row: row,
             index: index,
             len: len,
             func: func,
-            length: length
-            } = parameterObject;
+            width: width,
+            height: height
+        } = parameters;
 
         // setting data members and member functions with the values from tempVariables
-        this.offset = offset || 0;
         this.widthOfParent = widthOfParent || windowWidth;
         this.heightOfParent = heightOfParent || windowHeight;
-        this.portrait = orientation || windowWidth < windowHeight;
+        this.row = row || windowWidth < windowHeight;
         this.index = index || 0;
         this.len = len || 1;
         this.func = func || null;
 
-        if (this.portrait){
-            this.offset = offset || this.index * this.widthOfParent / this.len;
-            this.length = length || this.widthOfParent / this.len;
-        } else {
-            this.offset = offset || this.index * this.heightOfParent / this.len;
-            this.length = length || this.heightOfParent / this.len;
-        }
+        if (this.row){
+            this.width = width || this.widthOfParent;
+            this.height = height || this.heightOfParent / this.len;
 
+            this.offsetX = offsetX || 0;
+            this.offsetY = offsetY || this.index * this.heightOfParent / this.len;
+        } else {
+            this.width = width || this.widthOfParent / this.len;
+            this.height = height || this.heightOfParent;
+
+            this.offsetX = offsetX || this.index * this.widthOfParent / this.len;
+            this.offsetY = offsetY || 0;
+        }
         this.randomColor = (getRandomInt(256))
     }
 
-    recreate(widthOfCanvas, heightOfCanvas){}
+    // recreate(widthOfCanvas, heightOfCanvas){
+    //     if (this.row){
+    //         this.height = height || this.widthOfParent / this.len;
+    //         this.width = width || this.heightOfParent / this.len;
+    //
+    //         this.offset = offset || this.index * this.widthOfParent / this.len;
+    //     } else {
+    //         this.height = height || this.widthOfParent / this.len;
+    //         this.width = width || this.heightOfParent / this.len;
+    //
+    //         this.offset = offset || this.index * this.heightOfParent / this.len;
+    //     }
+    // }
+
+    getParameterList(){
+         let parameters = {
+            offsetX: "the offset of the container's left corner along the X-axis. if none, index * windowWidth / len",
+            offsetY: "the offset of the container's left corner along the Y-axis. if none, index * windowHeight / len",
+            widthOfParent: "the width of the parent container, if none, the windowWidth of the canvas",
+            heightOfParent: "the height of the parent container, if none, the windowHeight of the canvas",
+            orientation: "the orientation of the container: row or column, if none, windowWidth < windowHeight of the canvas",
+            index: "the index of the container in the parent object, if none, 0",
+            len: "the number of siblings contained in the parent container. if none, 1.",
+            func: "a wildcard function. if none, nullFunction.",
+            width: "the width of the container. if none, the windowWidth / len.",
+            height: "the height of the container. if none, the windowHeight / len.",
+        };
+        console.log(this.nullFunction())
+        return parameters
+    }
 
     draw(){
         fill(this.randomColor);
-        if (this.portrait){
-            rect(0,this.offset,this.width,this.length)
-        }else{
-            rect(this.offset, 0,this.length, this.width)
-        }
-    }
-
-    getEndingY(){
-        return this.offset + this.length;
+        rect(this.offsetX,this.offsetY,this.width,this.height)
     }
 }
-
-/*
-
-ALL containers should...
-    have a starting location on the canvas (where to begin):
-        x (FIXED: 0)
-        y
-    have a width (FIXED: length of the canvas)
-    have a length (how far down the canvas the container extends)
-    have a draw() function to draw the items contained in the container
-    have a method that returns where the container ends:
-        startingLocation.y + length of container
-    a method to recreateSelf() when the window is resized.
-
-individual containers should...
-    the snapshotContainer needs to extend its length with every snapshot
-        and inform the canvas that the canvas needs to extend itself as well
-
-what info to pass in?
-    starting location:
-        y
-    container / bounds info:
-        length
-
-
-*/
