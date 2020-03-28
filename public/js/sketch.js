@@ -120,11 +120,7 @@ function mouseClicked() {
 function mousePressed() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
     for (let i = 0; i < buttons.length; i++){
-        // if (buttons[i].testForClick(clickLocation)){
-        //     console.log('wow', buttons.length)
-        // }
         if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging != undefined){
-                console.log('wow', buttons.length)
             buttons[i].isDragging = true;
         }
     }
@@ -139,14 +135,4 @@ function mouseReleased() {
         }
         buttons[i].isDragging = false;
     }
-    console.log(value)
 }
-
-// function saveToComputer(){
-//     let nums = Date.now()
-//     let filename = nums.toString() + ".png"
-//     let dimensions = grid.getGridDimensions()
-//
-//     let im = get(0, 0, dimensions[0], dimensions[1]);
-//     im.save(filename);
-// }
