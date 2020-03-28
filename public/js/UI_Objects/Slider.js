@@ -1,56 +1,50 @@
 
 // button base class
-class Slider {
-    constructor(widthOfContainer, heightOfContainer, orientation, index, lenSliders, func, userDragButton){
-        // True = row, False = column
-        this.orientation = orientation;
-        // the number of buttons in the container
-        this.lenOfSlider = lenSliders;
-        // index of this button
-        this.index = index;
+class Slider extends UIElement {
+    constructor(parameterObject){
+        super(parameterObject);
 
-        this.buttonWidth = 20;
-        this.buttonHeight = 20;
-        this.borderRadius = 40;
+        if (this.row){
 
+            this.offset = this.widthOfParent/10
 
-        // the placement of the button on the canvas based on the orientation
-            //  and the bounds of the container.
-        if (this.orientation){
-
-            this.offset = widthOfContainer/10
-
-            this.buttonX = userDragButton || this.offset;
-            this.buttonY = this.offset + index * heightOfContainer / lenSliders;
+            this.buttonX = this.userDragButtonAmount || this.offset;
+            this.buttonY = this.offset + this.index * this.heightOfParent / this.len;
 
             this.sliderX = this.offset
             this.sliderY = this.buttonY + this.buttonHeight/2.6
 
-            this.sliderWidth = widthOfContainer - this.offset*2;
+            this.sliderWidth = this.widthOfParent - this.offset*2;
             this.sliderHeight = this.buttonWidth/4;
 
         } else {
 
-            this.offset = heightOfContainer/10
+            this.offset = this.heightOfParent/10
 
-            this.buttonX = index * widthOfContainer / lenSliders + (widthOfContainer/(lenSliders*2));
-            this.buttonY = userDragButton | this.offset;
+            this.buttonX = this.index * this.widthOfParent / this.len + (this.widthOfParent/(this.len*2));
+            this.buttonY = this.userDragButtonAmount | this.offset;
 
             this.sliderX = this.buttonX + this.buttonWidth/2.6
             this.sliderY = this.offset
 
             this.sliderWidth = this.buttonWidth/4;
-            this.sliderHeight = heightOfContainer - heightOfContainer/10 - this.offset;
-
+            this.sliderHeight = this.heightOfParent - this.heightOfParent/10 - this.offset;
         }
 
+        // button-specific member variables
+        this.width = 20;
+        this.height = 20;
         this.mouseOver = false;
+        this.isDragging = false;
+        this.userDragButtonAmount = 0;
+
+        this.buttonWidth = 20;
+        this.buttonHeight = 20;
+
+        // testing
+        this.borderRadius = 40;
         this.color = 'black';
         this.mouseOverColor = 'blue';
-
-        this.func = func;
-
-        this.isDragging = false;
     }
 
     performClickFunctionality(){
@@ -79,37 +73,6 @@ class Slider {
         }
     }
 
-    // // call this method and store the variable before
-    // //     calling the recreateCanvas method
-    // storeUserDragButtonValue(){
-    //     let portrait = true;
-    //     if (this.orientation == portrait){
-    //         return this.buttonX
-    //     } else {
-    //         return this.buttonY
-    //     }
-    // }
-
-    // call this method on mouseReleased() to retrieve a float
-        // that is proportional to the sliders range
-    getScaledUserDragButtonValue(){
-        let portrait = true;
-        if (this.orientation == portrait){
-            return this.buttonX/this.sliderWidth
-        } else {
-            return this.buttonY/this.sliderHeight
-        }
-    }
-
-    getNewScaledUserDragButtonValue(oldValue){
-        let portrait = true;
-        if (this.orientation == portrait){
-            return this.sliderWidth*oldValue;
-        } else {
-            return this.sliderHeight*oldValue;
-        }
-    }
-
     userDrag(){
         let portrait = true;
             if (this.orientation == portrait){
@@ -127,6 +90,7 @@ class Slider {
         if (this.isDragging){
             this.userDrag();
         }
+
     // slider groove
       noStroke();
       fill(220)

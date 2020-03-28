@@ -44,10 +44,9 @@ function recreateCanvas(){
             // offsetY: windowHeight/2,
             // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
             // heightOfParent: windowHeight/2,
-            row: true,
+            row: portrait,
             index: i,
             len: 2,
-            color: 'red',
             // func: this.nullFunction,
             // width: 40,
             // height: 40
@@ -56,63 +55,50 @@ function recreateCanvas(){
         uiElements.push(container)
 
         for (let j = 0; j < 3; j++){
-                if (j%2){
-                innerContainerParameters = {
+            if (j%2){
+                for (let k = 0; k < 5; k++){
+                innerInnerContainerParameters = {
                     // offsetX: windowWidth/2,
                     // offsetY: windowHeight/2,
                     // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
                     // heightOfParent: windowHeight/2,
                     row: false,
-                    index: j,
-                    len: 3,
+                    index: k,
+                    len: 5,
                     parent: container,
+                    color: 'green',
                     // func: this.nullFunction,
                     // width: 40,
                     // height: 40
                 }
+                innerInnerContainer = new Container(innerInnerContainerParameters)
+                uiElements.push(innerInnerContainer)
+            }
             } else {
-                    innerContainerParameters = {
-                        // offsetX: windowWidth/2,
-                        // offsetY: windowHeight/2,
-                        // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
-                        // heightOfParent: windowHeight/2,
-                        row: false,
-                        index: j,
-                        len: 3,
-                        parent: container,
-                        color: 'yellow',
-                        // func: this.nullFunction,
-                        // width: 40,
-                        // height: 40
-                    }
-                }
-                innerContainer = new Container(innerContainerParameters)
-                uiElements.push(innerContainer)
-                if (j%2){
-                    for (let k = 0; k < 3; k++){
-                    buttonParameters = {
-                        // offsetX: windowWidth/2,
-                        // offsetY: windowHeight/2,
-                        // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
-                        // heightOfParent: windowHeight/2,
-                        row: portrait,
-                        index: k,
-                        len: 5,
-                        parent: innerContainer,
-                        color: 'green',
-                        // func: this.nullFunction,
-                        // width: 10,
-                        // height: 10,
-                    }
-                    button = new Button(buttonParameters)
-                    uiElements.push(button)
-                    }
+                innerContainerParameters = {
+                    // offsetX: windowWidth/2,
+                    // offsetY: windowHeight/2,
+                    // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
+                    // heightOfParent: windowHeight/2,
+                    row: true,
+                    index: j,
+                    len: 3,
+                    parent: container,
+                    color: 'yellow',
+                    // func: this.nullFunction,
+                    // width: 40,
+                    // height: 40
                 }
             }
+
+            innerContainer = new Container(innerContainerParameters)
+            uiElements.push(innerContainer)
         }
-    console.log(uiElements)
-    canvas = createCanvas(windowWidth, windowHeight);
-}
+    }
+        canvas = createCanvas(windowWidth, windowHeight);
+    }
+
+
 
 // button functionality on click
 let nullFunction = () => "I do nothing!";
@@ -125,6 +111,7 @@ function mouseClicked() {
 // p5.js built-in method
 function mousePressed() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
+
 }
 
 // p5.js built-in method

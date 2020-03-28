@@ -66,6 +66,7 @@ function recreateCanvas(){
                     index: j,
                     len: 3,
                     parent: container,
+                    color: 'purple',
                     // func: this.nullFunction,
                     // width: 40,
                     // height: 40
@@ -125,6 +126,7 @@ function mouseClicked() {
 // p5.js built-in method
 function mousePressed() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
+
 }
 
 // p5.js built-in method
