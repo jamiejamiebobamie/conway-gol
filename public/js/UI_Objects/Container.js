@@ -3,48 +3,53 @@ return Math.floor(Math.random() * Math.floor(max));
 }
 
 class Container{
-    constructor(offset, y, length, widthOfCanvas, heightOfCanvas, portrait, numberOfContainers, indexOfContainer){
 
-        this.startingPosition = y + offset;
+    constructor(parameterObject){
+        // destructuring my parameterObject and intializing tempVariables
+        let {
+            offset: offset,
+            widthOfParent: widthOfParent,
+            heightOfParent: heightOfParent,
+            orientation: orientation,
+            index: index,
+            len: len,
+            func: func,
+            length: length
+            } = parameterObject;
 
-        this.numberOfContainers = numberOfContainers;
-        this.index = indexOfContainer;
+        // setting data members and member functions with the values from tempVariables
+        this.offset = offset || 0;
+        this.widthOfParent = widthOfParent || windowWidth;
+        this.heightOfParent = heightOfParent || windowHeight;
+        this.portrait = orientation || windowWidth < windowHeight;
+        this.index = index || 0;
+        this.len = len || 1;
+        this.func = func || null;
 
-        if (portrait){
-            this.width = widthOfCanvas;
-            this.height = heightOfCanvas;
-            this.length = length || windowWidth/numberOfContainers;
-
-        }else{
-            this.width = heightOfCanvas;
-            this.height = widthOfCanvas;
-            this.length = length || heightOfCanvas/numberOfContainers;
-
+        if (this.portrait){
+            this.offset = offset || this.index * this.widthOfParent / this.len;
+            this.length = length || this.widthOfParent / this.len;
+        } else {
+            this.offset = offset || this.index * this.heightOfParent / this.len;
+            this.length = length || this.heightOfParent / this.len;
         }
 
-        this.portrait = portrait;
         this.randomColor = (getRandomInt(256))
-
-
-
     }
 
-    recreate(widthOfCanvas, heightOfCanvas){
-            this.width = widthOfCanvas;
-            this.randomColor = (getRandomInt(256))
-    }
+    recreate(widthOfCanvas, heightOfCanvas){}
 
     draw(){
         fill(this.randomColor);
         if (this.portrait){
-            rect(0,this.startingPosition,this.width,this.length)
+            rect(0,this.offset,this.width,this.length)
         }else{
-            rect(this.startingPosition, 0,this.length, this.width)
+            rect(this.offset, 0,this.length, this.width)
         }
     }
 
     getEndingY(){
-        return this.startingPosition + this.length;
+        return this.offset + this.length;
     }
 }
 

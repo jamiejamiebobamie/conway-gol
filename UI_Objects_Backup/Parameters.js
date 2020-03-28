@@ -3,15 +3,15 @@ class Parameters{
     constructor(parameterObject){
         // destructuring my parameterObject and intializing tempVariables
         let {
-            offset,
-            widthOfParent,
-            heightOfParent,
-            orientation,
-            index,
-            len,
-            func,
-            length,
-        } = parameterObject;
+            offset: offset,
+            widthOfParent: widthOfParent,
+            heightOfParent: heightOfParent,
+            orientation: orientation,
+            index: index,
+            len: len,
+            func: func,
+            length: length
+            } = parameterObject;
 
         // setting data members and member functions with the values from tempVariables
         this.offset = offset || 0;
