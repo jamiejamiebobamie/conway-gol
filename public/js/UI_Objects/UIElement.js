@@ -18,16 +18,13 @@ class UIElement{
             func: this.nullFunction,
             width: undefined,
             height: undefined,
-            color: undefined
+            color: undefined,
         };
 
-        // if there is a parameter object, set the 'parameters' variable
-            // to point to it.
-        if(parameterObject){
+        if (parameterObject){
             parameters = parameterObject;
         }
 
-        // destructuring parameterObject and intializing temporary variables
         let {
             offsetX: offsetX,
             offsetY: offsetY,
@@ -38,12 +35,12 @@ class UIElement{
             func: func,
             width: width,
             height: height,
-            color: color
+            color: color,
         } = parameters;
 
         // setting data members and member functions
             // with the values from 'parameter' variables
-        if (parent){
+        if (parent) {
             this.widthOfParent = parent.width;
             this.heightOfParent = parent.height;
         } else {
@@ -60,14 +57,14 @@ class UIElement{
         this.func = func || null;
         this.color = color || undefined
 
-        if (this.row){
+        if (this.row) {
 
             this.width = width || this.widthOfParent;
             this.height = height || this.heightOfParent / this.len;
 
             if (parent){
-                this.x = this.offsetX + parent.x || parent.x;
-                this.y = this.offsetY + parent.y || this.index * this.heightOfParent / this.len + parent.y;
+                this.x = parent.x;
+                this.y = this.index * this.heightOfParent / this.len + parent.y;
             } else {
                 this.x = this.offsetX || 0;
                 this.y = this.offsetY || this.index * this.heightOfParent / this.len;
@@ -78,29 +75,20 @@ class UIElement{
             this.width = width || this.widthOfParent / this.len;
             this.height = height || this.heightOfParent;
 
-            if (parent){
-                this.x = this.offsetX + parent.x || this.index * this.widthOfParent / this.len + parent.x;
-                this.y = this.offsetY + parent.y || parent.y;
+            if (parent) {
+                this.x = this.index * this.widthOfParent / this.len + parent.x;
+                this.y = parent.y;
             } else {
-                this.x = this.offsetX || this.index * this.widthOfParent / this.len;
-                this.y = this.offsetY || 0;
+                this.x = this.index * this.widthOfParent / this.len;
+                this.y = 0;
             }
         }
     }
 
-    // recreate(widthOfCanvas, heightOfCanvas){
-    //     if (this.row){
-    //         this.height = height || this.widthOfParent / this.len;
-    //         this.width = width || this.heightOfParent / this.len;
-    //
-    //         this.offset = offset || this.index * this.widthOfParent / this.len;
-    //     } else {
-    //         this.height = height || this.widthOfParent / this.len;
-    //         this.width = width || this.heightOfParent / this.len;
-    //
-    //         this.offset = offset || this.index * this.heightOfParent / this.len;
-    //     }
-    // }
+    recreate(){
+        // for child in children:
+            // child.recreate()
+    }
 
     getParameterList(){
          let parameters = {
@@ -115,7 +103,6 @@ class UIElement{
             width: "the width of the container. if none, the windowWidth / len.",
             height: "the height of the container. if none, the windowHeight / len.",
         };
-        console.log(this.nullFunction())
         return parameters
     }
 

@@ -3,11 +3,11 @@ return Math.floor(Math.random() * Math.floor(max));
 }
 
 class Container extends UIElement{
-    constructor(parameterObject){
+    constructor(parameterObject) {
         super(parameterObject);
     }
 
-    draw(){
+    draw() {
         // testing to show the bounds of the container
         if(this.color){
             fill(this.color);
