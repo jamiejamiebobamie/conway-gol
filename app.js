@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-const port = process.env.PORT || 14000;
+const port = process.env.PORT || 9000;
 
  app.get('/', (req, res) => {
      res.render('index', {});

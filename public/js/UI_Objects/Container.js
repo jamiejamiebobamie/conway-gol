@@ -11,7 +11,6 @@ class Container extends UIElement{
         // testing to show the bounds of the container
         if(this.color){
             fill(this.color);
-            // rect(50,50,50,50)
             rect(this.x,this.y,this.width,this.height)
         }
     }

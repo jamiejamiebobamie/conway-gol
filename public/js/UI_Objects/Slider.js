@@ -1,55 +1,53 @@
 
 // button base class
-class Slider extends UIElement {
+class Slider extends UIElement{
     constructor(parameterObject){
         super(parameterObject);
-
-        if (this.row){
-
-            this.offset = this.widthOfParent/10
-
-            this.buttonX = this.userDragButtonAmount || this.offset;
-            this.buttonY = this.offset + this.index * this.heightOfParent / this.len;
-
-            this.sliderX = this.offset
-            this.sliderY = this.buttonY + this.buttonHeight/2.6
-
-            this.sliderWidth = this.widthOfParent - this.offset*2;
-            this.sliderHeight = this.buttonWidth/4;
-
-        } else {
-
-            this.offset = this.heightOfParent/10
-
-            this.buttonX = this.index * this.widthOfParent / this.len + (this.widthOfParent/(this.len*2));
-            this.buttonY = this.userDragButtonAmount | this.offset;
-
-            this.sliderX = this.buttonX + this.buttonWidth/2.6
-            this.sliderY = this.offset
-
-            this.sliderWidth = this.buttonWidth/4;
-            this.sliderHeight = this.heightOfParent - this.heightOfParent/10 - this.offset;
-        }
+        // let index = parameterObject.index || 0;
 
         // button-specific member variables
         this.width = 20;
         this.height = 20;
         this.mouseOver = false;
         this.isDragging = false;
-        this.userDragButtonAmount = 0;
-
-        this.buttonWidth = 20;
-        this.buttonHeight = 20;
+        // this.userDragButtonAmount = 0;
 
         // testing
-        this.borderRadius = 40;
         this.color = 'black';
         this.mouseOverColor = 'blue';
-    }
 
-    performClickFunctionality(){
-        if (this.func){
-            this.func();
+        // the placement of the button on the canvas based on the orientation
+            //  and the bounds of the container.
+        let widthOfContainer = this.parent ? this.parent.width : windowWidth;
+        let heightOfContainer = this.parent ? this.parent.height : windowHeight;
+        let userDragButton;
+        console.log(parent)
+        if (this.row){
+
+            this.offset = widthOfContainer/10
+
+            this.buttonX = userDragButton || this.offset + this.parent.x
+            this.buttonY = heightOfContainer/(this.len*2) + this.index * heightOfContainer / this.len + this.parent.y
+
+            this.sliderX = this.offset
+            this.sliderY = this.buttonY
+
+            this.sliderWidth = widthOfContainer - this.offset*2;
+            this.sliderHeight = this.width/4;
+
+        } else {
+
+            this.offset = heightOfContainer/10
+
+            this.buttonX = widthOfContainer/(this.len*2) + this.index * widthOfContainer / this.len + this.parent.x;
+            this.buttonY = userDragButton | this.offset + this.parent.y;
+
+            this.sliderX = this.buttonX
+            this.sliderY = this.offset
+
+            this.sliderWidth = this.width/4;
+            this.sliderHeight = heightOfContainer - heightOfContainer/10 - this.offset;
+
         }
     }
 
@@ -63,10 +61,10 @@ class Slider extends UIElement {
     }
 
     testForMouseOver(mouseX, mouseY){
-        if (mouseX > this.buttonX - this.borderRadius/2
-            && mouseX < this.buttonX + this.borderRadius/2
-            && mouseY > this.buttonY - this.borderRadius/2
-            && mouseY < this.borderRadius/2 + this.buttonY){
+        if (mouseX > this.buttonX - this.width/2
+            && mouseX < this.buttonX + this.width/2
+            && mouseY > this.buttonY - this.width/2
+            && mouseY < this.width/2 + this.buttonY){
                 return true
         } else {
             return false
@@ -75,7 +73,7 @@ class Slider extends UIElement {
 
     userDrag(){
         let portrait = true;
-            if (this.orientation == portrait){
+            if (this.row == portrait){
                 if ( this.offset < mouseX && mouseX < this.sliderWidth+this.offset){
                         this.buttonX = mouseX;
                 }
@@ -96,7 +94,8 @@ class Slider extends UIElement {
       fill(220)
       rect(this.sliderX, this.sliderY, this.sliderWidth, this.sliderHeight, 0);
 
-    // slider button
+    // this should be top level.
+
     if (this.testForMouseOver(mouseX, mouseY)){
         fill(0,240,0)
         stroke(0,0,230);
@@ -104,7 +103,7 @@ class Slider extends UIElement {
         fill(240)
         stroke(230);
     }
-    rect(this.buttonX, this.buttonY, this.buttonWidth, this.buttonHeight, this.borderRadius);
+    ellipse(this.buttonX, this.buttonY, this.width);
     }
 
 }

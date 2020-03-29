@@ -39,7 +39,7 @@ class UIElement{
         } = parameters;
 
         this.row = row != undefined ? row : windowWidth < windowHeight;
-        index = index || 0;
+        this.index = index || 0;
 
         offsetX = offsetX || 0;
         offsetY = offsetY || 0;
