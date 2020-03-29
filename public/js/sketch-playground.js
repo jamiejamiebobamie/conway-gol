@@ -41,8 +41,6 @@ function recreateCanvas(){
 
     uiElements = []
     for (let i = 0; i < 4; i++){
-        if (i%2){
-
             containerParameters = {
                 // offsetX: windowWidth/2,
                 // offsetY: windowHeight/2,
@@ -58,111 +56,26 @@ function recreateCanvas(){
             }
             container = new Container(containerParameters)
             uiElements.push(container)
-
-            for (let k = 0; k < 10; k++){
+    for (let j = 0; j < 3; j++){
             buttonParameters = {
                 // offsetX: windowWidth/2,
                 // offsetY: windowHeight/2,
                 // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
                 // heightOfParent: windowHeight/2,
                 row: !portrait,
-                index: k,
-                len: 10,
-                color: 'green',
+                index: j,
+                len: 3,
+                color: 'blue',
                 parent: container,
                 // func: this.nullFunction,
                 // width: 10,
                 // height: 10,
             }
-            // button = new Button(buttonParameters)
-            // uiElements.push(button)
+            button = new Button(buttonParameters)
+            uiElements.push(button)
+        }
     }
-
-} else if (i != 3) {
-
-    containerParameters = {
-        // offsetX: windowWidth/2,
-        // offsetY: windowHeight/2,
-        // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
-        // heightOfParent: windowHeight/2,
-        row: portrait,
-        index: i,
-        len: 4,
-        color: 'red',
-        name:"container"
-
-        // func: this.nullFunction,
-        // width: 40,
-        // height: 40
-    }
-    container = new Container(containerParameters)
-    uiElements.push(container)
-
-    for (let k = 0; k < 2; k++){
-    contParameters = {
-        // offsetX: windowWidth/2,
-        // offsetY: windowHeight/2,
-        // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
-        // heightOfParent: windowHeight/2,
-        row: !portrait,
-        index: k,
-        len: 2,
-        color: 'green',
-        parent: container,
-        name:"cont"
-
-        // func: this.nullFunction,
-        // width: 10,
-        // height: 10,
-    }
-    cont = new Container(contParameters)
-    uiElements.push(cont)
-
-    for (let j = 0; j < 2; j++){
-    cParams = {
-        // offsetX: windowWidth/2,
-        // offsetY: windowHeight/2,
-        // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
-        // heightOfParent: windowHeight/2,
-        row: portrait,
-        index: j,
-        len: 2,
-        color: 'blue',
-        parent: cont,
-        name:"cParams"
-        // func: this.nullFunction,
-        // width: 10,
-        // height: 10,
-    }
-    c = new Container(cParams)
-    uiElements.push(c)
-
-    for (let l = 0; l < 2; l++){
-    buttonParameters = {
-        // offsetX: windowWidth/2,
-        // offsetY: windowHeight/2,
-        // widthOfParent: windowWidth/2, // this should be a pointer to a parent object
-        // heightOfParent: windowHeight/2,
-        row: !portrait,
-        index: l,
-        len: 2,
-        color: 'blue',
-        parent: c,
-        // func: this.nullFunction,
-        // width: 10,
-        // height: 10,
-    }
-    button = new Button(buttonParameters)
-    uiElements.push(button)
-}
-
-
-}
-
-}
-}
-}
-// console.log(uiElements)
+    console.log(uiElements)
 }
 
 // button functionality on click

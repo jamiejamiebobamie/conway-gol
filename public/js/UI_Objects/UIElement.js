@@ -38,49 +38,51 @@ class UIElement{
             color: color,
         } = parameters;
 
-        // setting data members and member functions
-            // with the values from 'parameter' variables
-        if (parent) {
-            this.widthOfParent = parent.width;
-            this.heightOfParent = parent.height;
-        } else {
-            this.widthOfParent = windowWidth;
-            this.heightOfParent = windowHeight;
-        }
-
-        this.offsetX = offsetX || 0;
-        this.offsetY = offsetY || 0;
-
         this.row = row != undefined ? row : windowWidth < windowHeight;
-        this.index = index || 0;
+        index = index || 0;
+
+        offsetX = offsetX || 0;
+        offsetY = offsetY || 0;
         this.len = len || 1;
         this.func = func || null;
         this.color = color || undefined
 
-        if (this.row) {
-
-            this.width = width || this.widthOfParent;
-            this.height = height || this.heightOfParent / this.len;
-
+        if (row) {
             if (parent){
-                this.x = parent.x;
-                this.y = this.index * this.heightOfParent / this.len + parent.y;
+                this.parent = parent
+                this.width = width || this.parent.width;
+                this.height = height || this.parent.height / this.len;
+
+                this.x = this.parent.x;
+                this.y = index * this.parent.height / this.len + this.parent.y;
+
             } else {
-                this.x = this.offsetX || 0;
-                this.y = this.offsetY || this.index * this.heightOfParent / this.len;
+                this.width = width || windowWidth;
+                this.height = height || windowHeight / this.len;
+
+                this.x = offsetX;
+                this.y = offsetY || index * windowHeight / this.len;
             }
 
         } else {
 
-            this.width = width || this.widthOfParent / this.len;
-            this.height = height || this.heightOfParent;
-
             if (parent) {
-                this.x = this.index * this.widthOfParent / this.len + parent.x;
-                this.y = parent.y;
+                this.parent = parent
+                this.width = width || this.parent.width / this.len;
+                this.height = height || this.parent.height;
+
+                this.x = index * this.parent.width / this.len + this.parent.x;
+                this.y = this.parent.y;
+
             } else {
-                this.x = this.index * this.widthOfParent / this.len;
-                this.y = 0;
+
+                this.width = width || windowWidth / this.len;
+                this.height = height || windowHeight;
+
+                this.x = offsetX || index * windowWidth / this.len;
+                this.y = offsetY
+                // this.x = index *  windowWidth / this.len;
+                // this.y = 0;
             }
         }
     }
@@ -89,6 +91,14 @@ class UIElement{
         // for child in children:
             // child.recreate()
     }
+
+    // p5.js built-in method
+    mouseDragged() {}
+
+    // abstract methods for subclasses
+    performClickFunctionality(){}
+    testForClick(clickLocation) {}
+    testForMouseOver(mouseX, mouseY) {}
 
     getParameterList(){
          let parameters = {
@@ -105,5 +115,4 @@ class UIElement{
         };
         return parameters
     }
-
 }

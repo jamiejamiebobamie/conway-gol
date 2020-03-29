@@ -4,32 +4,25 @@ class Button extends UIElement{
     constructor(parameterObject) {
         super(parameterObject);
 
-        // button-specific member variables
-        this.buttonDiam = 20;
+        this.width = 20;
         this.mouseOver = false;
-        this.borderRadius = 15;
+        this.mouseOverColor = 'pink'; // testing
 
-        // testing
-        this.mouseOverColor = 'pink';
-        // the button orientation needs to be set to the opposite of
-            // the orientation of the container
-        // let tempRow = super.row // not working
-        // this.row = !tempRow
+        // the placement of the button on the canvas based on the desried
+            //   orientation and the bounds of the container.
+        let offsetX;
+        let offsetY;
 
-
-        // the placement of the button on the canvas based on the orientation
-            //  and the bounds of the container.
-        if (this.row) {
-            this.offsetX = this.widthOfParent/2
-            this.offsetY = this.heightOfParent/this.len/2
+        if (this.parent.row) {
+            offsetX = this.parent.width/this.len/2;
+            offsetY = this.parent.height/2;
         } else {
-            this.offsetX = this.widthOfParent/this.len/2
-            this.offsetY = this.heightOfParent/2
+            offsetX = this.parent.width/2;
+            offsetY = this.parent.height/this.len/2;
         }
 
-        this.x = this.x + this.offsetX
-        this.y = this.y + this.offsetY
-        // console.log(this.x)
+        this.x += offsetX;
+        this.y += offsetY;
     }
 
     performClickFunctionality(){
@@ -39,39 +32,30 @@ class Button extends UIElement{
     }
 
     testForClick(clickLocation) {
-        if (clickLocation.x > this.x - this.buttonDiam
-            && clickLocation.x < this.x + this.buttonDiam
-            && clickLocation.y > this.y - this.buttonDiam
-            && clickLocation.y < this.buttonDiam + this.y) {
+        if (clickLocation.x > this.x - this.width
+            && clickLocation.x < this.x + this.width
+            && clickLocation.y > this.y - this.width
+            && clickLocation.y < this.width + this.y) {
             return true;
         }
     }
 
     testForMouseOver(mouseX, mouseY) {
-        if (mouseX > this.x - this.buttonDiam
-            && mouseX < this.x + this.buttonDiam
-            && mouseY > this.y - this.buttonDiam
-            && mouseY < this.buttonDiam + this.y)
+        if (mouseX > this.x - this.width
+            && mouseX < this.x + this.width
+            && mouseY > this.y - this.width
+            && mouseY < this.width + this.y)
         {
-            return true
+            return true;
         } else {
-            return false
+            return false;
         }
     }
 
-    // p5.js built-in method
-    mouseDragged() {}
+
 
     draw() {
-        // not all buttons will change color on mouseover.
-        if (this.testForMouseOver(mouseX, mouseY)) {
-            fill(this.mouseOverColor);
-        } else {
-            fill(this.color);
-        }
-        // testing will delete.
-        // subclasses will draw their own icons and i'll call super.draw()
-        ellipse(this.x, this.y, this.buttonDiam)
-         // rect(this.x, this.y, this.buttonDiam);
+        this.testForMouseOver(mouseX, mouseY) ? fill(this.mouseOverColor) : fill(this.color);
+        ellipse(this.x, this.y, this.width)
     }
 }
