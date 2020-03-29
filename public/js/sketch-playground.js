@@ -14,6 +14,7 @@ let canvasDivisorHeight = 5;
 
 // p5.js built-in method
 function setup() {
+    canvas = createCanvas(windowWidth, windowHeight);
     recreateCanvas();
     canvas.parent('sketch-holder');
 
@@ -23,6 +24,7 @@ function setup() {
 
 // p5.js built-in method
 function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
     recreateCanvas();
 }
 
@@ -161,7 +163,6 @@ function recreateCanvas(){
 }
 }
 // console.log(uiElements)
-    canvas = createCanvas(windowWidth, windowHeight);
 }
 
 // button functionality on click

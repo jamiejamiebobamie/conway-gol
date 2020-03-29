@@ -5,8 +5,7 @@ class Button extends UIElement{
         super(parameterObject);
 
         // button-specific member variables
-        this.buttonWidth = 20;
-        this.buttonHeight = 20;
+        this.buttonDiam = 20;
         this.mouseOver = false;
         this.borderRadius = 15;
 
@@ -21,11 +20,11 @@ class Button extends UIElement{
         // the placement of the button on the canvas based on the orientation
             //  and the bounds of the container.
         if (this.row) {
-            this.offsetX = this.widthOfParent/2.35
-            this.offsetY = this.heightOfParent/this.len/2.35
+            this.offsetX = this.widthOfParent/2
+            this.offsetY = this.heightOfParent/this.len/2
         } else {
-            this.offsetX = this.widthOfParent/this.len/2.35
-            this.offsetY = this.heightOfParent/2.35
+            this.offsetX = this.widthOfParent/this.len/2
+            this.offsetY = this.heightOfParent/2
         }
 
         this.x = this.x + this.offsetX
@@ -40,19 +39,19 @@ class Button extends UIElement{
     }
 
     testForClick(clickLocation) {
-        if (clickLocation.x > this.x - this.borderRadius
-            && clickLocation.x < this.x + this.borderRadius
-            && clickLocation.y > this.y - this.borderRadius
-            && clickLocation.y < this.borderRadius + this.y) {
+        if (clickLocation.x > this.x - this.buttonDiam
+            && clickLocation.x < this.x + this.buttonDiam
+            && clickLocation.y > this.y - this.buttonDiam
+            && clickLocation.y < this.buttonDiam + this.y) {
             return true;
         }
     }
 
     testForMouseOver(mouseX, mouseY) {
-        if (mouseX > this.x - this.borderRadius
-            && mouseX < this.x + this.borderRadius
-            && mouseY > this.y - this.borderRadius
-            && mouseY < this.borderRadius + this.y)
+        if (mouseX > this.x - this.buttonDiam
+            && mouseX < this.x + this.buttonDiam
+            && mouseY > this.y - this.buttonDiam
+            && mouseY < this.buttonDiam + this.y)
         {
             return true
         } else {
@@ -72,6 +71,7 @@ class Button extends UIElement{
         }
         // testing will delete.
         // subclasses will draw their own icons and i'll call super.draw()
-         rect(this.x, this.y, this.buttonWidth, this.buttonHeight, this.borderRadius);
+        ellipse(this.x, this.y, this.buttonDiam)
+         // rect(this.x, this.y, this.buttonDiam);
     }
 }
