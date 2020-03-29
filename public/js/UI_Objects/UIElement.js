@@ -1,7 +1,3 @@
-function getRandomInt(max) {
-return Math.floor(Math.random() * Math.floor(max));
-}
-
 class UIElement{
     constructor(parameterObject){
 
@@ -81,8 +77,6 @@ class UIElement{
 
                 this.x = offsetX || index * windowWidth / this.len;
                 this.y = offsetY
-                // this.x = index *  windowWidth / this.len;
-                // this.y = 0;
             }
         }
     }

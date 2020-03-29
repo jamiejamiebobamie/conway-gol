@@ -8,8 +8,6 @@ class Button extends UIElement{
         this.mouseOver = false;
         this.mouseOverColor = 'pink'; // testing
 
-        // the placement of the button on the canvas based on the desried
-            //   orientation and the bounds of the container.
         if (!this.row) {
             this.offsetX = this.parent.width/this.len/2;
             this.offsetY = this.parent.height/2;

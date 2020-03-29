@@ -1,5 +1,3 @@
-
-// button base class
 class Slider extends UIElement{
     constructor(parameterObject){
         super(parameterObject);
@@ -91,17 +89,15 @@ class Slider extends UIElement{
 
     // slider groove
       noStroke();
-      fill(220)
       rect(this.sliderX, this.sliderY, this.sliderWidth, this.sliderHeight, 0);
 
     // this should be top level.
-
     if (this.testForMouseOver(mouseX, mouseY)){
         fill(0,240,0)
-        stroke(0,0,230);
+        // stroke(0,0,230);
     } else {
         fill(240)
-        stroke(230);
+        // stroke(230);
     }
     ellipse(this.buttonX, this.buttonY, this.width);
     }

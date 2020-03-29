@@ -1,7 +1,3 @@
-function getRandomInt(max) {
-return Math.floor(Math.random() * Math.floor(max));
-}
-
 class Container extends UIElement{
     constructor(parameterObject) {
         super(parameterObject);
