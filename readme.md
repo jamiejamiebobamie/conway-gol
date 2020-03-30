@@ -10,7 +10,7 @@ p5.js is a successor to Processing.js, which is similar to the Canvas API. The C
 
 I am still in the process of implementing features and functionality and will write a more detailed guide when I have finalized the project and officially released v1.
 
-##For my professors:
+## For my professors:
 I initially made commits to [this repo](https://github.com/jamiejamiebobamie/conways-GoL), which has a working example of the modifications that I made to Conways Game of Life.
 
 ## Getting Started
