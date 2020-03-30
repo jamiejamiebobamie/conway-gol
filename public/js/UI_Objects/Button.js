@@ -8,15 +8,17 @@ class Button extends UIElement{
         this.mouseOver = false;
         this.mouseOverColor = 'pink'; // testing
 
+        let offsetX;
+        let offsetY;
         if (!this.row) {
-            this.offsetX = this.parent.width/this.len/2;
-            this.offsetY = this.parent.height/2;
+            offsetX = this.parent.width/this.len/2;
+            offsetY = this.parent.height/2;
         } else {
-            this.offsetX = this.parent.width/2;
-            this.offsetY = this.parent.height/this.len/2;
+            offsetX = this.parent.width/2;
+            offsetY = this.parent.height/this.len/2;
         }
-        this.x += this.offsetX;
-        this.y += this.offsetY;
+        this.x += offsetX;
+        this.y += offsetY;
     }
 
     performClickFunctionality(){
@@ -46,8 +48,14 @@ class Button extends UIElement{
         }
     }
 
+    // containers can be dragged to change position
+    userDrag(){
+        this.x = mouseX;
+        this.y = mouseY;
+    }
+
     draw() {
-        // this.testForMouseOver(mouseX, mouseY) ? fill(this.mouseOverColor) : fill(this.color);
+        this.mouseOver ? fill(this.mouseOverColor) : fill(this.color);
         ellipse(this.x, this.y, this.width)
     }
 }

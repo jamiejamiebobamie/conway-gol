@@ -3,12 +3,10 @@ class Slider extends UIElement{
         super(parameterObject);
         // let index = parameterObject.index || 0;
 
-        // button-specific member variables
         this.width = 20;
-        this.height = 20;
         this.mouseOver = false;
         this.isDragging = false;
-        // this.userDragButtonAmount = 0;
+        this.userDragButtonAmount = 0;
 
         // testing
         this.color = 'black';
@@ -19,7 +17,7 @@ class Slider extends UIElement{
         let widthOfContainer = this.parent ? this.parent.width : windowWidth;
         let heightOfContainer = this.parent ? this.parent.height : windowHeight;
         let userDragButton;
-        console.log(parent)
+
         if (this.row){
 
             this.offset = widthOfContainer/10
@@ -79,27 +77,23 @@ class Slider extends UIElement{
                 if ( this.offset-5 < mouseY && mouseY < this.sliderHeight+this.offset){
                 this.buttonY = mouseY;
             }
+        }
     }
-}
 
     draw(){
         if (this.isDragging){
             this.userDrag();
         }
 
-    // slider groove
-      noStroke();
-      rect(this.sliderX, this.sliderY, this.sliderWidth, this.sliderHeight, 0);
+        // slider groove
+        noStroke();
+        rect(this.sliderX, this.sliderY, this.sliderWidth, this.sliderHeight, 0);
 
-    // this should be top level.
-    if (this.testForMouseOver(mouseX, mouseY)){
-        fill(0,240,0)
-        // stroke(0,0,230);
-    } else {
-        fill(240)
-        // stroke(230);
-    }
-    ellipse(this.buttonX, this.buttonY, this.width);
+        // this should be top level.
+
+        this.mouseOver ? fill(this.mouseOverColor) : fill(this.color);
+
+        ellipse(this.buttonX, this.buttonY, this.width);
     }
 
 }

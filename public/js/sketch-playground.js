@@ -1,28 +1,32 @@
+// the p5.js canvas
+let canvas;
+
+// orientation of the canvas. true for portrait
 let portrait;
 let uiElements;
 
-let canvas;
-let grid;
-let buttons = [];
-let slider;
-let sliders = []
+// array of uiElements that can be interacted with.
+let interactives;
 
 // constants that control the size of the p5.js canvas
+let grid;
 let gridWidth;
 let gridHeight;
-let canvasDivisorWidth = 15;
-let canvasDivisorHeight = 5;
-let containerExtension = 0;
-let buttonContainerWidth;
 let autoRefreshOn = true;
 
-let numSliders = 1;
 
 // p5.js built-in method
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
     frameRate(24);
+
+    interactives = []
+    gridContainerParams = {row: portrait, color:'red', width:200, height:200}
+    gridContainer = new Container(gridContainerParams)
+    interactives.push(gridContainer)
+
     redrawElements();
+
     canvas.parent('sketch-holder');
     // centers the canvas
     imageMode(CENTER);
@@ -37,9 +41,17 @@ function windowResized() {
 // p5.js built-in method
 function draw () {
     background(200);
-    for (let i = 0 ; i < uiElements.length; i++){
-            uiElements[i].draw();
+    // for (let i = 0 ; i < uiElements.length; i++){
+    //         uiElements[i].draw();
+    //
+    // }
+
+    for (let i = 0 ; i < interactives.length; i++){
+        interactives[i].draw();
+
     }
+
+
     // if (grid.checkForEndState() && autoRefreshOn){
     //     redrawElements();
     //     console.log('hi')
@@ -49,45 +61,28 @@ function draw () {
 
 function redrawElements(){
     portrait = windowWidth < windowHeight;
+
+    // i need to separate the static ui elements and interactive ones
+        // in two different arrays
     uiElements = []
-    gridWidth = portrait ? windowWidth-windowWidth/5.7 : windowWidth/2-windowWidth/24
-    gridHeight = portrait ? windowHeight/2-windowHeight/16 : windowHeight-windowHeight/2
-    gridOffsetX = gridWidth/9
-    gridOffsetY = gridHeight/9
 
-    nullContainerParams = {row: portrait, color:'blue', len:2, index:1}
-    nullContainer = new Container(nullContainerParams)
-    uiElements.push(nullContainer)
+    // grid = new Grid(windowWidth/2,windowHeight/2,portrait);
 
-    uiContainerParams = {row: portrait, color:'orange', len:2, index:0, parent: nullContainer}
-    uiContainer = new Container(uiContainerParams)
-    uiElements.push(uiContainer)
+    // trying to maintain the placement of the interactive object relative to
+        // its parent after resizing the window
+    for (let i = 0; i < interactives.length; i++){
+        if (interactives[i].hasBeenDragged){
+            console.log('hi')
+            interactives[i].x = interactives[i].draggedX * interactives[i].ratioX
+            interactives[i].y = interactives[i].draggedY * interactives[i].ratioY
+        }
 
-    sliderContainerParams = {row: portrait, color:'pink', len:2, index:0, parent: uiContainer}
-    sliderContainer = new Container(sliderContainerParams)
-    uiElements.push(sliderContainer)
-
-    sliderParams = {row: portrait, parent: sliderContainer}
-    slider = new Slider(sliderParams)
-    uiElements.push(slider)
-
-    buttonContainerParams = {row: portrait, color:'red', len:2, index:1, parent: uiContainer}
-    buttonContainer = new Container(buttonContainerParams)
-    uiElements.push(buttonContainer)
-
-    buttonParams1 = {row: !portrait, color:'green', len:2, index:0, parent: buttonContainer}
-    button1 = new Button(buttonParams1)
-    uiElements.push(button1)
-
-    buttonParams2 = {row: !portrait, color:'green', len:2, index:1, parent: buttonContainer}
-    button2 = new Button(buttonParams2)
-    uiElements.push(button2)
-
-    gridContainerParams = {offsetX:gridOffsetX,offsetY:gridOffsetY, color:'red', width:gridWidth, height:gridHeight}
-    gridContainer = new Container(gridContainerParams)
-    uiElements.push(gridContainer)
-
-    grid = new Grid(windowWidth/2,windowHeight/2,portrait);
+        // if(interactives[i].hasBeenDragged){
+        //     parentDimensions = interactives[i].getParentWidthAndHeight();
+        //     interactives[i].x = interactives[i].x/parentDimensions.width
+        //     interactives[i].y = interactives[i].y/parentDimensions.height
+        // }
+    }
 
 }
 
@@ -103,12 +98,15 @@ let saveToComputer = () => {
     im.save(filename);
 }
 
+// mouse interactivity should be handled on the top level.
+    // but uielements that have interactivity need to be added to the iterable
+
 // p5.js built-in method
 function mouseClicked() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
-    for (let i = 0; i < buttons.length; i++){
-        if (buttons[i].testForClick(clickLocation)){
-            buttons[i].performClickFunctionality()
+    for (let i = 0; i < interactives.length; i++){
+        if (interactives[i].testForClick(clickLocation)){
+            interactives[i].performClickFunctionality()
         }
     }
 }
@@ -116,9 +114,9 @@ function mouseClicked() {
 // p5.js built-in method
 function mousePressed() {
     clickLocation = { 'x': mouseX, 'y' : mouseY };
-    for (let i = 0; i < buttons.length; i++){
-        if (buttons[i].testForClick(clickLocation) && buttons[i].isDragging != undefined){
-            buttons[i].isDragging = true;
+    for (let i = 0; i < interactives.length; i++){
+        if (interactives[i].testForClick(clickLocation) && interactives[i].isDragging != undefined){
+            interactives[i].isDragging = true;
         }
     }
 }
@@ -126,10 +124,8 @@ function mousePressed() {
 // p5.js built-in method
 function mouseReleased() {
     let value;
-    for (let i = 0; i < buttons.length; i++){
-        if (buttons[i].isDragging){
-            value = buttons[i].getScaledUserDragButtonValue()
-        }
-        buttons[i].isDragging = false;
+    for (let i = 0; i < interactives.length; i++){
+        interactives[i].performValuesResetAfterDrag()
+        interactives[i].isDragging = false;
     }
 }

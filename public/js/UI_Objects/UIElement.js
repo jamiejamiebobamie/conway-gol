@@ -1,8 +1,5 @@
 class UIElement{
     constructor(parameterObject){
-
-        this.nullFunction = () => "I do nothing!";
-
         // null parameterObject
         let parameters = {
             offsetX: undefined,
@@ -11,7 +8,8 @@ class UIElement{
             row: undefined,
             index: undefined,
             len: undefined,
-            func: this.nullFunction,
+            mouseClickfunc: undefined,
+            mouseDragfunc: undefined,
             width: undefined,
             height: undefined,
             color: undefined,
@@ -28,55 +26,56 @@ class UIElement{
             row: row,
             index: index,
             len: len,
-            func: func,
+            mouseClickfunc: mouseClickfunc,
+            mouseDragfunc: mouseDragfunc,
             width: width,
             height: height,
             color: color,
         } = parameters;
 
-        this.row = row != undefined ? row : windowWidth < windowHeight;
-        this.index = index || 0;
+        this.mouseClickfunc = mouseClickfunc;
+        this.mouseDragfunc = mouseDragfunc;
 
-        offsetX = offsetX || 0;
-        offsetY = offsetY || 0;
+        this.index = index != undefined ? index : 0;
         this.len = len || 1;
-        this.func = func || null;
-        this.color = color || undefined
+        this.color = color != undefined ? color : undefined;
 
-        if (row) {
+        offsetX = offsetX != undefined ? offsetX : 0;
+        offsetY = offsetY != undefined ? offsetY : 0;
+
+        this.row = row != undefined ? row : windowWidth < windowHeight;
+
+        if (this.row) {
             if (parent){
-                this.parent = parent
+
+                // if portrait mode and parent
+                this.parent = parent;
                 this.width = width || this.parent.width;
                 this.height = height || this.parent.height / this.len;
-
-                this.x = this.parent.x;
-                this.y = index * this.parent.height / this.len + this.parent.y;
-
+                this.x = this.parent.x + offsetX;
+                this.y = this.index * this.parent.height / this.len + this.parent.y + offsetY;
             } else {
+                // if portrait mode and no parent
                 this.width = width || windowWidth;
                 this.height = height || windowHeight / this.len;
-
                 this.x = offsetX;
-                this.y = offsetY || index * windowHeight / this.len;
+                this.y = this.index * windowHeight / this.len + offsetY;
             }
 
         } else {
-
             if (parent) {
-                this.parent = parent
+                // if landscape mode and parent
+                this.parent = parent;
                 this.width = width || this.parent.width / this.len;
                 this.height = height || this.parent.height;
-
-                this.x = index * this.parent.width / this.len + this.parent.x;
-                this.y = this.parent.y;
-
+                this.x = this.index * this.parent.width / this.len + this.parent.x + offsetX;
+                this.y = this.parent.y + offsetY;
             } else {
-
+                // if landscape and no parent
                 this.width = width || windowWidth / this.len;
                 this.height = height || windowHeight;
-
-                this.x = offsetX || index * windowWidth / this.len;
-                this.y = offsetY
+                this.x = offsetX + this.index * windowWidth / this.len;
+                this.y = offsetY;
             }
         }
     }
@@ -93,7 +92,21 @@ class UIElement{
     performClickFunctionality(){}
     testForClick(clickLocation) {}
     testForMouseOver(mouseX, mouseY) {}
+    performValuesResetAfterDrag(){}
 
+    getParentWidthAndHeight(){
+        parentDimensions = {width:0, height:0}
+        if (this.parent){
+            parentDimensions.width = parent.width
+            parentDimensions.height = parent.height
+        } else {
+            parentDimensions.width =  parent.width
+            parentDimensions.height = parent.height
+        }
+        return parentDimensions
+    }
+
+    // incorrect. will edit when parameters are finalized.
     getParameterList(){
          let parameters = {
             offsetX: "the offset of the container's left corner along the X-axis. if none, index * windowWidth / len",
