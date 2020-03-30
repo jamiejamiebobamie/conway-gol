@@ -6,6 +6,9 @@ class Container extends UIElement{
         this.dragOffsetX = undefined;
         this.dragOffsetY = undefined;
 
+        // the x and y coordinates of all UI elements are anchored at the top left
+            // corner.
+            // when clicked, the element needs to take this into account.
         if (!this.hasBeenDragged){
             this.draggedX = undefined
             this.draggedY = undefined
@@ -17,7 +20,7 @@ class Container extends UIElement{
         }
     }
 
-    // containers can have interactivity so test for mouseover
+    // containers can have interactivity
     testForMouseOver(mouseX, mouseY){
         if (mouseX > this.buttonX - this.width/2
             && mouseX < this.buttonX + this.width/2
@@ -42,7 +45,7 @@ class Container extends UIElement{
     // subclasses implement click behavior
     performClickFunctionality(){}
 
-    // containers can be dragged to change position
+    // containers can be dragged to change their position
     userDrag(){
         if (this.dragOffsetX == undefined){
             this.dragOffsetX = this.x - mouseX;

@@ -14,14 +14,18 @@ let gridWidth;
 let gridHeight;
 let autoRefreshOn = true;
 
-
 // p5.js built-in method
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
     frameRate(24);
 
+    // just for testing: separated the static ui elements and interactive ones
+    uiElements = []
+    testContainerParams = {color:'green', offsetX: 200, width:400, height:400}
+    test1Container = new Container(testContainerParams)
+    uiElements.push(test1Container)
     interactives = []
-    gridContainerParams = {row: portrait, color:'red', width:200, height:200}
+    gridContainerParams = {row: portrait, color:'red', width:200, height:200, parent: test1Container}
     gridContainer = new Container(gridContainerParams)
     interactives.push(gridContainer)
 
@@ -41,14 +45,12 @@ function windowResized() {
 // p5.js built-in method
 function draw () {
     background(200);
-    // for (let i = 0 ; i < uiElements.length; i++){
-    //         uiElements[i].draw();
-    //
-    // }
+    for (let i = 0 ; i < uiElements.length; i++){
+        uiElements[i].draw();
+    }
 
     for (let i = 0 ; i < interactives.length; i++){
         interactives[i].draw();
-
     }
 
 
@@ -62,28 +64,27 @@ function draw () {
 function redrawElements(){
     portrait = windowWidth < windowHeight;
 
-    // i need to separate the static ui elements and interactive ones
-        // in two different arrays
-    uiElements = []
-
-    // grid = new Grid(windowWidth/2,windowHeight/2,portrait);
-
     // trying to maintain the placement of the interactive object relative to
-        // its parent after resizing the window
+        // its parent after resizing the window.
+        // because interactives aren't recreated like other uiElements when this
+        // method is called, you can't parent interactives at the moment.
+        // need to fix how interactives function to be encapsulated.
+
+        // also: all uiElements have their coordinates centered at the top left
+        // corner and as a result can end up being drawn mostly outside the
+        // parent container's boundaries.
+
+        // also also: there is no stopping an interactive from being dragged
+        // outside its parent.
     for (let i = 0; i < interactives.length; i++){
         if (interactives[i].hasBeenDragged){
             console.log('hi')
-            interactives[i].x = interactives[i].draggedX * interactives[i].ratioX
-            interactives[i].y = interactives[i].draggedY * interactives[i].ratioY
+            interactives[i].x = interactives[i].ratioX * this.parent.width
+            interactives[i].y = interactives[i].ratioY * this.parent.height
         }
-
-        // if(interactives[i].hasBeenDragged){
-        //     parentDimensions = interactives[i].getParentWidthAndHeight();
-        //     interactives[i].x = interactives[i].x/parentDimensions.width
-        //     interactives[i].y = interactives[i].y/parentDimensions.height
-        // }
     }
 
+    // grid = new Grid(windowWidth/2,windowHeight/2,portrait);
 }
 
 // button functionality on click

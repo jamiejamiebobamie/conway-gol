@@ -61,7 +61,6 @@ class UIElement{
                 this.x = offsetX;
                 this.y = this.index * windowHeight / this.len + offsetY;
             }
-
         } else {
             if (parent) {
                 // if landscape mode and parent
