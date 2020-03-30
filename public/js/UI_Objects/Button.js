@@ -4,7 +4,7 @@ class Button extends UIElement{
     constructor(parameterObject) {
         super(parameterObject);
 
-        this.width = 20;
+        this.width = this.width || 20;
         this.mouseOver = false;
         this.mouseOverColor = 'pink'; // testing
 
