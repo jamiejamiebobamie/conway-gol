@@ -47,7 +47,6 @@ class UIElement{
 
         if (this.row) {
             if (parent){
-
                 // if portrait mode and parent
                 this.parent = parent;
                 this.width = width || this.parent.width;

@@ -1,9 +1,7 @@
 // the p5.js canvas
 let canvas;
 
-// orientation of the canvas. true for portrait
-let portrait;
-let uiElements;
+let uiElements = [];
 
 // array of uiElements that can be interacted with.
 let interactives = [];
@@ -14,14 +12,20 @@ let gridWidth;
 let gridHeight;
 let autoRefreshOn = true;
 
+let opponentContainer;
+
 // p5.js built-in method
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
+
     frameRate(24);
 
+    // draws the elements on the canvas
     redrawElements();
 
+    // parents the canvas to the DOM element 'sketch-holder'
     canvas.parent('sketch-holder');
+
     // centers the canvas
     imageMode(CENTER);
 }
@@ -34,90 +38,41 @@ function windowResized() {
 
 // p5.js built-in method
 function draw () {
-    background(200);
-
-
-    for (let i = 0 ; i < uiElements.length; i++){
+    background(30);
+    for (let k = 0; k < uiElements.length; k++){
         uiElements[i].draw();
     }
-
-    for (let i = 0 ; i < interactives.length; i++){
-        interactives[i].draw();
-    }
-
-    // if (grid.checkForEndState() && autoRefreshOn){
-    //     redrawElements();
-    //     console.log('hi')
-    // }
-    // grid.draw();
 }
 
 function redrawElements(){
-    portrait = windowWidth < windowHeight;
+    let portrait = windowWidth < windowHeight;
 
-    let storeRatios = []
-    for (let i = 0; i < interactives.length; i++){
-        if (interactives[i].hasBeenDragged){
-            let ratio = {index: i, x:interactives[i].ratioX, y:interactives[i].ratioY};
-            storeRatios.push(ratio);
-        }
-    }
-
-    // just for testing: separated the static ui elements and interactive ones
-    uiElements = [];
-    interactives = []
+    let uiElements = [];
     let squareSide = portrait ? windowWidth : windowHeight;
 
-    // let bodyParams = {row: portrait, color:'pink', offsetY:90};
-    // let body = new Container(bodyParams);
-    // uiElements.push(body);
+    let opponentContainerParams = {row: portrait, width:200, height: 200, offsetX: 200, offsetY: 200}///width:squareSide/1.5, height:squareSide/1.5, offsetX:windowWidth/20, offsetY:windowHeight/7 };
+    let opponentContainer = new Container(opponentContainerParams)
+    uiElements.push(opponentContainer);
 
-    let gameCircleParams = {color:'blue', width:squareSide/1.5, height:squareSide/1.5, offsetX:windowWidth/20, offsetY:windowHeight/7 };
-    let gameCircle = new Container(gameCircleParams)
-    uiElements.push(gameCircle);
+    let buttonParams = {offsetX: windowWidth/2, offsetY: windowHeight/2}
+    let button = new Button(buttonParams)
+    uiElements.push(button)
 
-    let testCircleParams = {color:'yellow', width:gameCircle.width, parent:gameCircle };
-    let testCircle = new Button(testCircleParams)
-    // testCircle =
-    uiElements.push(testCircle);
+    let boardParams = {color:'black', width:squareSide/3, height:squareSide/3, offsetX:windowWidth/2, offsetY:windowHeight/2.2};
+    let board = new Container(boardParams)
+    uiElements.push(board)
 
-    let scoreboardParams = {color:'red', width:squareSide/3, height:squareSide/3, offsetX:windowWidth/2, offsetY:windowHeight/2.2};
-    let scoreboard = new Container(scoreboardParams)
-    interactives.push(scoreboard)
+    for (let i = 0; i < 3; i++){
+        let rowParams = {color:'white', index: i, len:3, width:board.width - board.width*2/7, height:board.height - board.height*2/7, offsetX:board.width/7, offsetY:board.height/7, parent: board};
+        let row = new Container(rowParams)
+        uiElements.push(row)
 
-    //
-    // gridContainerParams = {row: false, color:'blue', width:20, height:20}
-    // gridContainer2 = new Container(gridContainerParams)
-    // uiElements.push(gridContainer2)
-    //
-
-    for (let i = 0; i < storeRatios.length; i++){
-        let interactive = interactives[storeRatios[i].index]
-        interactive.hasBeenDragged = true;
-        let parentWidth = interactive.parent ? interactive.parent.width : windowWidth
-        let parentHeight = interactive.parent ? interactive.parent.height : windowHeight
-        console.log(storeRatios[i])
-        interactive.ratioX = storeRatios[i].x// parentWidth
-        interactive.ratioY = storeRatios[i].y
-        interactive.x = storeRatios[i].x * parentWidth// parentWidth
-        interactive.y = storeRatios[i].y * parentHeight
+        for (let j = 0; j < 3; j++){
+            let columnParams = {color:'white', index: j, len:3, width:row.width/4, height:row.height/4, parent: row};
+            let column = new Container(columnParams)
+            uiElements.push(column)
         }
-
-        let navbarWidth = portrait ? windowWidth : 120;
-        let navbarHeight = portrait ? 120 : windowHeight;
-        let offset = !portrait ? windowWidth - 120 : 0 ;
-
-        let navBarParams = {row: portrait, color:'green', width: navbarWidth, height:navbarHeight, offsetX:offset};
-        let navBar = new Container(navBarParams);
-        uiElements.push(navBar);
-
-        for (let i = 0; i < 6; i++){
-            let navBarButtonParams = {row: !portrait, color:'black', width:20, len:6, index: i, parent:navBar};
-            let navBarButton = new Button(navBarButtonParams);
-            uiElements.push(navBarButton);
-        }
-
-    // grid = new Grid(windowWidth/2,windowHeight/2,portrait);
+    }
 }
 
 // button functionality on click

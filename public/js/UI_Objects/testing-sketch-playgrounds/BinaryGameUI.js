@@ -72,16 +72,16 @@ function redrawElements(){
     // let body = new Container(bodyParams);
     // uiElements.push(body);
 
-    let gameCircleParams = {color:'blue', width:squareSide/1.5, height:squareSide/1.5, offsetX:windowWidth/20, offsetY:windowHeight/7 };
+    let gameCircleParams = {color:'blue',width:squareSide/1.5, height:squareSide/1.5, offsetX:windowWidth/20, offsetY:windowHeight/7 };
     let gameCircle = new Container(gameCircleParams)
     uiElements.push(gameCircle);
 
-    let testCircleParams = {color:'yellow', width:gameCircle.width, parent:gameCircle };
+    let testCircleParams = {color:'yellow',width:gameCircle.width, parent:gameCircle };
     let testCircle = new Button(testCircleParams)
     // testCircle =
     uiElements.push(testCircle);
 
-    let scoreboardParams = {color:'red', width:squareSide/3, height:squareSide/3, offsetX:windowWidth/2, offsetY:windowHeight/2.2};
+    let scoreboardParams = {color:'red',width:squareSide/3, height:squareSide/3, offsetX:windowWidth/2, offsetY:windowHeight/2.2};
     let scoreboard = new Container(scoreboardParams)
     interactives.push(scoreboard)
 
