@@ -85,14 +85,11 @@ class Slider extends UIElement{
             this.userDrag();
         }
 
+        stroke(0);
+        noFill();
         // slider groove
-        noStroke();
         rect(this.sliderX, this.sliderY, this.sliderWidth, this.sliderHeight, 0);
-
-        // this should be top level.
-
-        this.mouseOver ? fill(this.mouseOverColor) : fill(this.color);
-
+        // slider button
         ellipse(this.buttonX, this.buttonY, this.width);
     }
 
